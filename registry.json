@@ -1,0 +1,8 @@
+{
+  "$schema": "https://shadcn-ui-registry.vercel.app/schema.json",
+  "styles": ["default"],
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/app/globals.css"
+  }
+}
