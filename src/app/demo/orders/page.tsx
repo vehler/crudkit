@@ -4,6 +4,9 @@ import { Crud } from '@/components/crudkit/crud-table'
 import { MockDataProvider } from '@/lib/demo/mock-data-provider'
 import { orderSchema, mockOrders } from '@/lib/demo/schemas/order'
 
+// Force dynamic rendering for this page (uses URL state)
+export const dynamic = 'force-dynamic'
+
 // Create data provider instance
 const orderDataProvider = new MockDataProvider(mockOrders)
 

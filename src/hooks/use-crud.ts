@@ -87,7 +87,12 @@ export function useCrud<T = any>(
       pageSize: parseAsInteger.withDefault(10),
       sortField: parseAsString,
       sortOrder: parseAsString.withDefault('asc'),
-      filters: parseAsJson<Record<string, string>>().withDefault({}),
+      filters: parseAsJson<Record<string, string>>((value) => {
+        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+          return value as Record<string, string>
+        }
+        return null
+      }).withDefault({}),
       search: parseAsString.withDefault(''),
     },
     {
@@ -220,13 +225,18 @@ export function useCrud<T = any>(
     },
 
     setFilter: (key: string, value: string | null) => {
-      setUrlState((prev) => ({
-        filters: {
-          ...prev.filters,
-          [key]: value || undefined, // Remove if null/empty
-        },
-        page: 1, // Reset to first page
-      }))
+      setUrlState((prev) => {
+        const newFilters = { ...prev.filters }
+        if (value) {
+          newFilters[key] = value
+        } else {
+          delete newFilters[key]
+        }
+        return {
+          filters: newFilters,
+          page: 1, // Reset to first page
+        }
+      })
     },
 
     clearFilters: () => {

@@ -4,6 +4,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
 import { cn } from '@/lib/utils'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
+
+// Force dynamic rendering for all demo pages
+export const dynamic = 'force-dynamic'
 
 export default function DemoLayout({
   children,
@@ -20,7 +24,8 @@ export default function DemoLayout({
   ]
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+    <NuqsAdapter>
+      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-sm dark:bg-zinc-900/80">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -82,6 +87,7 @@ export default function DemoLayout({
 
       {/* Main Content */}
       <main>{children}</main>
-    </div>
+      </div>
+    </NuqsAdapter>
   )
 }

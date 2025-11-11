@@ -88,10 +88,10 @@ export class MockDataProvider<T extends Record<string, any>> implements DataProv
     await new Promise((resolve) => setTimeout(resolve, this.delay))
 
     const newItem = {
-      ...newData,
       id: String(Date.now()),
       createdAt: new Date().toISOString(),
-    } as T
+      ...newData,
+    } as unknown as T
 
     this.data.push(newItem)
     return newItem
