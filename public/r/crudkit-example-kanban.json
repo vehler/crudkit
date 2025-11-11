@@ -3,7 +3,7 @@
   "name": "crudkit-example-kanban",
   "type": "registry:block",
   "title": "CRUDKit Kanban Board Example",
-  "description": "Complete working example of task management with Kanban view.",
+  "description": "Complete working example of task management with Kanban board view. Includes task schema with status-based grouping (todo, in-progress, done), mock task data, and view mode switching between traditional table and kanban board layouts. Demonstrates drag-and-drop task status updates, customizable card rendering, and seamless integration between CRUDKit core and kanban plugin. Ideal for project management tools, bug trackers, and workflow applications.",
   "dependencies": [],
   "registryDependencies": [
     "crudkit",
@@ -17,13 +17,13 @@
       "target": "app/examples/kanban/page.tsx"
     },
     {
-      "path": "registry/default/crudkit/crudkit-example-kanban/task-schema.ts",
+      "path": "registry/default/crudkit/crudkit-example-kanban/lib/task-schema.ts",
       "content": "import type { Schema } from '@/lib/crudkit/data-provider'\n\nexport const taskSchema: Schema = {\n  title: 'Task',\n  idField: 'id',\n  fields: [\n    {\n      name: 'title',\n      label: 'Task Title',\n      type: 'text',\n      required: true,\n      sortable: true,\n    },\n    {\n      name: 'description',\n      label: 'Description',\n      type: 'textarea',\n      required: false,\n    },\n    {\n      name: 'status',\n      label: 'Status',\n      type: 'select',\n      options: [\n        { value: 'todo', label: 'To Do' },\n        { value: 'in-progress', label: 'In Progress' },\n        { value: 'done', label: 'Done' },\n      ],\n      required: true,\n      filterable: true,\n    },\n    {\n      name: 'priority',\n      label: 'Priority',\n      type: 'select',\n      options: [\n        { value: 'low', label: 'Low' },\n        { value: 'medium', label: 'Medium' },\n        { value: 'high', label: 'High' },\n      ],\n      required: true,\n      filterable: true,\n    },\n    {\n      name: 'assignee',\n      label: 'Assignee',\n      type: 'text',\n      required: false,\n      filterable: true,\n    },\n  ],\n}\n",
       "type": "registry:lib",
       "target": "@/lib/examples/task-schema.ts"
     },
     {
-      "path": "registry/default/crudkit/crudkit-example-kanban/mock-tasks.ts",
+      "path": "registry/default/crudkit/crudkit-example-kanban/lib/mock-tasks.ts",
       "content": "export const mockTasks = [\n  {\n    id: '1',\n    title: 'Design new landing page',\n    status: 'todo',\n    priority: 'high',\n    assignee: 'John Doe',\n    description: 'Create mockups for the new marketing landing page',\n  },\n  {\n    id: '2',\n    title: 'Fix login bug',\n    status: 'in-progress',\n    priority: 'high',\n    assignee: 'Jane Smith',\n    description: 'Users unable to login with special characters in password',\n  },\n  {\n    id: '3',\n    title: 'Update documentation',\n    status: 'todo',\n    priority: 'low',\n    assignee: 'Bob Johnson',\n    description: 'Update API documentation with new endpoints',\n  },\n  {\n    id: '4',\n    title: 'Code review',\n    status: 'in-progress',\n    priority: 'medium',\n    assignee: 'Alice Williams',\n    description: 'Review PR #234 for the payment module',\n  },\n  {\n    id: '5',\n    title: 'Deploy to staging',\n    status: 'done',\n    priority: 'medium',\n    assignee: 'Charlie Brown',\n    description: 'Deploy latest changes to staging environment',\n  },\n  {\n    id: '6',\n    title: 'Write unit tests',\n    status: 'todo',\n    priority: 'medium',\n    assignee: 'John Doe',\n    description: 'Add unit tests for the new user service',\n  },\n  {\n    id: '7',\n    title: 'Customer feedback analysis',\n    status: 'done',\n    priority: 'low',\n    assignee: 'Jane Smith',\n    description: 'Analyze Q4 customer feedback surveys',\n  },\n  {\n    id: '8',\n    title: 'Implement search feature',\n    status: 'todo',\n    priority: 'high',\n    assignee: 'David Lee',\n    description: 'Add full-text search across all entities',\n  },\n  {\n    id: '9',\n    title: 'Optimize database queries',\n    status: 'in-progress',\n    priority: 'medium',\n    assignee: 'Emma Wilson',\n    description: 'Improve query performance on user dashboard',\n  },\n  {\n    id: '10',\n    title: 'Security audit',\n    status: 'done',\n    priority: 'high',\n    assignee: 'Frank Miller',\n    description: 'Complete quarterly security audit',\n  },\n]\n",
       "type": "registry:lib",
       "target": "@/lib/examples/mock-tasks.ts"

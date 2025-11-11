@@ -1,18 +1,9 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-import { useCrud, type UseCrudReturn } from './use-crud'
-import type { DataProvider, Schema, Field } from './data-provider'
-
-// ============================================
-// UTILITIES
-// ============================================
-
-function cn(...inputs: (string | undefined | null | false)[]) {
-  return twMerge(clsx(inputs))
-}
+import { useCrud, type UseCrudReturn } from '@/hooks/use-crud'
+import type { DataProvider, Schema, Field } from '@/lib/crudkit/data-provider'
+import { cn } from '@/lib/utils'
 
 // ============================================
 // CONTEXT

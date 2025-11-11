@@ -14,17 +14,17 @@
       "target": "app/examples/users/page.tsx"
     },
     {
-      "path": "registry/default/crudkit/crudkit-example-users/user-schema.ts",
+      "path": "registry/default/crudkit/crudkit-example-users/lib/user-schema.ts",
       "type": "registry:lib",
       "target": "@/lib/examples/user-schema.ts"
     },
     {
-      "path": "registry/default/crudkit/crudkit-example-users/mock-users.ts",
+      "path": "registry/default/crudkit/crudkit-example-users/lib/mock-users.ts",
       "type": "registry:lib",
       "target": "@/lib/examples/mock-users.ts"
     },
     {
-      "path": "registry/default/crudkit/crudkit-example-users/mock-data-provider.ts",
+      "path": "registry/default/crudkit/crudkit-example-users/lib/mock-data-provider.ts",
       "type": "registry:lib",
       "target": "@/lib/examples/mock-data-provider.ts"
     }

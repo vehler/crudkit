@@ -15,20 +15,10 @@ import {
   useDraggable,
   useDroppable,
 } from '@dnd-kit/core'
-import { clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-
 // Import the Crud context from crudkit
 // Note: Users will need to ensure proper path resolution
 import { useCrudContext } from '@/components/crudkit/crud-table'
-
-// ============================================
-// UTILITIES
-// ============================================
-
-function cn(...inputs: (string | undefined | null | false)[]) {
-  return twMerge(clsx(inputs))
-}
+import { cn } from '@/lib/utils'
 
 // ============================================
 // TYPES

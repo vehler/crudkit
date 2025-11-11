@@ -7,22 +7,34 @@
       "name": "crudkit",
       "type": "registry:block",
       "title": "CRUDKit",
-      "description": "Complete CRUD system with compound components, URL state management, and data provider interface.",
-      "registryDependencies": [],
-      "dependencies": ["nuqs", "clsx", "tailwind-merge"],
+      "description": "A comprehensive CRUD (Create, Read, Update, Delete) system built with React compound components pattern. Provides complete data management functionality including: URL-synchronized state management, server-side pagination with configurable page sizes, multi-field filtering with dynamic filter UI, column sorting (ascending/descending), bulk operations (select multiple, delete), inline search across all fields, create/edit/view modes with form validation, error handling with user feedback, loading states, and flexible data provider interface supporting REST APIs, GraphQL, tRPC, or any backend. Implements best practices with TypeScript type safety, accessible UI patterns, and responsive design. Perfect for building admin panels, dashboards, content management systems, and any data-driven application requiring full CRUD capabilities.",
+      "registryDependencies": [
+        "button",
+        "input",
+        "label",
+        "select",
+        "textarea",
+        "table",
+        "badge",
+        "card",
+        "checkbox",
+        "alert",
+        "skeleton"
+      ],
+      "dependencies": ["nuqs@^2.7.0", "clsx@^2.1.0", "tailwind-merge@^3.4.0"],
       "files": [
         {
-          "path": "registry/default/crudkit/crudkit/crud-table.tsx",
+          "path": "registry/default/crudkit/crudkit/components/crud-table.tsx",
           "type": "registry:component",
           "target": "@/components/crudkit/crud-table.tsx"
         },
         {
-          "path": "registry/default/crudkit/crudkit/use-crud.ts",
+          "path": "registry/default/crudkit/crudkit/hooks/use-crud.ts",
           "type": "registry:hook",
           "target": "@/hooks/use-crud.ts"
         },
         {
-          "path": "registry/default/crudkit/crudkit/data-provider.ts",
+          "path": "registry/default/crudkit/crudkit/lib/data-provider.ts",
           "type": "registry:lib",
           "target": "@/lib/crudkit/data-provider.ts"
         }
@@ -32,12 +44,12 @@
       "name": "crudkit-kanban",
       "type": "registry:block",
       "title": "CRUDKit Kanban Plugin",
-      "description": "Kanban board renderer for CRUDKit with drag-and-drop support.",
-      "registryDependencies": ["crudkit"],
-      "dependencies": ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities"],
+      "description": "Kanban board view plugin for CRUDKit that renders data as draggable cards organized in columns. Uses @dnd-kit for smooth drag-and-drop interactions. Supports grouping data by any field (e.g., status, priority, assignee), customizable column definitions, drag-to-update functionality, custom card renderers, responsive layout, and keyboard navigation. Integrates seamlessly with CRUDKit's data provider pattern. Ideal for task management, project tracking, workflow management, and any application needing a visual board interface.",
+      "registryDependencies": ["crudkit", "card", "badge"],
+      "dependencies": ["@dnd-kit/core@^6.3.0", "@dnd-kit/sortable@^10.0.0", "@dnd-kit/utilities@^3.2.0"],
       "files": [
         {
-          "path": "registry/default/crudkit/crudkit-kanban/kanban-board.tsx",
+          "path": "registry/default/crudkit/crudkit-kanban/components/kanban-board.tsx",
           "type": "registry:component",
           "target": "@/components/crudkit/kanban-board.tsx"
         }
@@ -47,7 +59,7 @@
       "name": "crudkit-example-users",
       "type": "registry:block",
       "title": "CRUDKit User Management Example",
-      "description": "Complete working example of user management with CRUDKit.",
+      "description": "Complete working example of user management with CRUDKit. Includes schema definition for user entities with fields (name, email, role, status, department), mock data with 50+ sample users, and fully functional MockDataProvider implementation. Demonstrates table view with search, multi-field filters (role, status, department), column sorting, pagination, and all CRUD operations (create, read, update, delete). Perfect starting point for building admin panels and user management interfaces.",
       "registryDependencies": ["crudkit"],
       "dependencies": [],
       "files": [
@@ -57,17 +69,17 @@
           "target": "app/examples/users/page.tsx"
         },
         {
-          "path": "registry/default/crudkit/crudkit-example-users/user-schema.ts",
+          "path": "registry/default/crudkit/crudkit-example-users/lib/user-schema.ts",
           "type": "registry:lib",
           "target": "@/lib/examples/user-schema.ts"
         },
         {
-          "path": "registry/default/crudkit/crudkit-example-users/mock-users.ts",
+          "path": "registry/default/crudkit/crudkit-example-users/lib/mock-users.ts",
           "type": "registry:lib",
           "target": "@/lib/examples/mock-users.ts"
         },
         {
-          "path": "registry/default/crudkit/crudkit-example-users/mock-data-provider.ts",
+          "path": "registry/default/crudkit/crudkit-example-users/lib/mock-data-provider.ts",
           "type": "registry:lib",
           "target": "@/lib/examples/mock-data-provider.ts"
         }
@@ -77,7 +89,7 @@
       "name": "crudkit-example-kanban",
       "type": "registry:block",
       "title": "CRUDKit Kanban Board Example",
-      "description": "Complete working example of task management with Kanban view.",
+      "description": "Complete working example of task management with Kanban board view. Includes task schema with status-based grouping (todo, in-progress, done), mock task data, and view mode switching between traditional table and kanban board layouts. Demonstrates drag-and-drop task status updates, customizable card rendering, and seamless integration between CRUDKit core and kanban plugin. Ideal for project management tools, bug trackers, and workflow applications.",
       "registryDependencies": ["crudkit", "crudkit-kanban"],
       "dependencies": [],
       "files": [
@@ -87,12 +99,12 @@
           "target": "app/examples/kanban/page.tsx"
         },
         {
-          "path": "registry/default/crudkit/crudkit-example-kanban/task-schema.ts",
+          "path": "registry/default/crudkit/crudkit-example-kanban/lib/task-schema.ts",
           "type": "registry:lib",
           "target": "@/lib/examples/task-schema.ts"
         },
         {
-          "path": "registry/default/crudkit/crudkit-example-kanban/mock-tasks.ts",
+          "path": "registry/default/crudkit/crudkit-example-kanban/lib/mock-tasks.ts",
           "type": "registry:lib",
           "target": "@/lib/examples/mock-tasks.ts"
         }
