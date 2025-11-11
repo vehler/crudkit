@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { CodeBlock } from '@/components/code/code-block'
 
-export default function ProductsPage() {
+export default function UsersPage() {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       {/* Navigation */}
@@ -43,10 +43,10 @@ export default function ProductsPage() {
             </Link>
           </div>
           <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
-            E-commerce Products
+            User Management
           </h1>
           <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-            Product catalog with categories, inventory management, and bulk operations
+            Complete user management system with CRUD operations, filtering, sorting, and pagination
           </p>
         </div>
       </div>
@@ -59,17 +59,17 @@ export default function ProductsPage() {
             Installation
           </h2>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            Install the CRUDKit products example using the CLI
+            Install the CRUDKit user management example using the CLI
           </p>
           <div className="mt-4">
             <CodeBlock
-              code={`npx shadcn add https://crudkit.dev/r/crudkit-example-products`}
+              code={`npx shadcn add https://crudkit.dev/r/crudkit-example-users`}
               language="bash"
               title="CLI"
             />
           </div>
           <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
-            This will install all required files including the page component, product schema, and 15+ mock products across 5 categories.
+            This will install all required files including the page component, schema definition, mock data, and the MockDataProvider utility.
           </p>
         </div>
 
@@ -77,10 +77,10 @@ export default function ProductsPage() {
         <div className="mt-8 rounded-lg border bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-              Product Management System
+              User Management System
             </h2>
             <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-              A complete product catalog with inventory tracking, category filtering, and bulk operations.
+              Manage users with complete CRUD operations, role-based filtering, and department organization.
             </p>
           </div>
 
@@ -90,19 +90,16 @@ export default function ProductsPage() {
               <thead className="border-b-2 border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-950">
                 <tr>
                   <th className="p-3 text-left text-xs font-semibold uppercase text-zinc-600 dark:text-zinc-400">
-                    Product
+                    Name
                   </th>
                   <th className="p-3 text-left text-xs font-semibold uppercase text-zinc-600 dark:text-zinc-400">
-                    SKU
+                    Email
                   </th>
                   <th className="p-3 text-left text-xs font-semibold uppercase text-zinc-600 dark:text-zinc-400">
-                    Category
+                    Role
                   </th>
                   <th className="p-3 text-left text-xs font-semibold uppercase text-zinc-600 dark:text-zinc-400">
-                    Price
-                  </th>
-                  <th className="p-3 text-left text-xs font-semibold uppercase text-zinc-600 dark:text-zinc-400">
-                    Stock
+                    Department
                   </th>
                   <th className="p-3 text-left text-xs font-semibold uppercase text-zinc-600 dark:text-zinc-400">
                     Status
@@ -111,11 +108,10 @@ export default function ProductsPage() {
               </thead>
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                 <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-950">
-                  <td className="p-3 text-sm text-zinc-900 dark:text-zinc-50">Wireless Headphones</td>
-                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">WH-001</td>
-                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">Electronics</td>
-                  <td className="p-3 text-sm text-zinc-900 dark:text-zinc-50">$79.99</td>
-                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">45</td>
+                  <td className="p-3 text-sm text-zinc-900 dark:text-zinc-50">John Doe</td>
+                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">john@example.com</td>
+                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">Admin</td>
+                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">Engineering</td>
                   <td className="p-3">
                     <span className="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
                       Active
@@ -123,11 +119,10 @@ export default function ProductsPage() {
                   </td>
                 </tr>
                 <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-950">
-                  <td className="p-3 text-sm text-zinc-900 dark:text-zinc-50">Cotton T-Shirt</td>
-                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">CT-101</td>
-                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">Clothing</td>
-                  <td className="p-3 text-sm text-zinc-900 dark:text-zinc-50">$19.99</td>
-                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">120</td>
+                  <td className="p-3 text-sm text-zinc-900 dark:text-zinc-50">Jane Smith</td>
+                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">jane@example.com</td>
+                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">Editor</td>
+                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">Marketing</td>
                   <td className="p-3">
                     <span className="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
                       Active
@@ -135,14 +130,13 @@ export default function ProductsPage() {
                   </td>
                 </tr>
                 <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-950">
-                  <td className="p-3 text-sm text-zinc-900 dark:text-zinc-50">Yoga Mat</td>
-                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">YM-301</td>
-                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">Sports</td>
-                  <td className="p-3 text-sm text-zinc-900 dark:text-zinc-50">$24.99</td>
-                  <td className="p-3 text-sm text-red-600 dark:text-red-400">0</td>
+                  <td className="p-3 text-sm text-zinc-900 dark:text-zinc-50">Bob Wilson</td>
+                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">bob@example.com</td>
+                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">Viewer</td>
+                  <td className="p-3 text-sm text-zinc-600 dark:text-zinc-400">Sales</td>
                   <td className="p-3">
                     <span className="inline-flex rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
-                      Out of Stock
+                      Inactive
                     </span>
                   </td>
                 </tr>
@@ -155,26 +149,26 @@ export default function ProductsPage() {
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           <div className="rounded-lg border bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
             <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
-              📦 Inventory Tracking
+              👥 Role Management
             </h3>
             <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-              Monitor stock levels and manage product availability in real-time
+              Organize users by roles (Admin, Editor, Viewer) with filterable permissions
             </p>
           </div>
           <div className="rounded-lg border bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
             <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
-              🏷️ Category Filtering
+              🔍 Advanced Filtering
             </h3>
             <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-              Organize products by categories for easy management and filtering
+              Filter by department, role, status, and search across all fields
             </p>
           </div>
           <div className="rounded-lg border bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
             <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
-              ⚡ Bulk Operations
+              📊 50+ Sample Users
             </h3>
             <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-              Select multiple products for batch updates, price changes, or deletion
+              Comes with realistic mock data across multiple departments
             </p>
           </div>
         </div>
@@ -185,7 +179,7 @@ export default function ProductsPage() {
             Usage
           </h2>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            After installation, use the products example in your application:
+            After installation, you can use the user management example in your application:
           </p>
           <div className="mt-4">
             <CodeBlock
@@ -193,18 +187,19 @@ export default function ProductsPage() {
 
 import { Crud } from '@/components/crudkit/crud-table'
 import { MockDataProvider } from '@/lib/examples/mock-data-provider'
-import { productSchema } from '@/lib/examples/product-schema'
-import { mockProducts } from '@/lib/examples/mock-products'
+import { userSchema } from '@/lib/examples/user-schema'
+import { mockUsers } from '@/lib/examples/mock-users'
 
-const productDataProvider = new MockDataProvider(mockProducts)
+// Create data provider instance
+const userDataProvider = new MockDataProvider(mockUsers)
 
-export default function ProductsPage() {
+export default function UsersPage() {
   return (
     <div className="container mx-auto py-8">
-      <Crud schema={productSchema} dataProvider={productDataProvider}>
+      <Crud schema={userSchema} dataProvider={userDataProvider}>
         <Crud.Toolbar />
         <Crud.Filters />
-        <Crud.List columns={['name', 'sku', 'category', 'price', 'stock', 'status']} />
+        <Crud.List columns={['name', 'email', 'role', 'status', 'department']} />
         <Crud.Form />
         <Crud.View />
       </Crud>
@@ -212,7 +207,7 @@ export default function ProductsPage() {
   )
 }`}
               language="typescript"
-              title="app/examples/products/page.tsx"
+              title="app/examples/users/page.tsx"
             />
           </div>
         </div>
@@ -223,33 +218,73 @@ export default function ProductsPage() {
             Schema Definition
           </h2>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            Define your product catalog structure:
+            Define the structure and behavior of your user data:
           </p>
           <div className="mt-4">
             <CodeBlock
-              code={`const productSchema = {
-  title: 'Product',
+              code={`import type { Schema } from '@/lib/crudkit/data-provider'
+
+export const userSchema: Schema = {
+  title: 'User',
   idField: 'id',
   fields: [
-    { name: 'name', label: 'Product Name', type: 'text', required: true },
-    { name: 'sku', label: 'SKU', type: 'text', required: true },
-    { name: 'price', label: 'Price', type: 'number', required: true },
     {
-      name: 'category',
-      label: 'Category',
+      name: 'name',
+      label: 'Name',
+      type: 'text',
+      required: true,
+      sortable: true,
+    },
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'email',
+      required: true,
+      sortable: true,
+    },
+    {
+      name: 'role',
+      label: 'Role',
       type: 'select',
       options: [
-        { value: 'electronics', label: 'Electronics' },
-        { value: 'clothing', label: 'Clothing' },
-        { value: 'sports', label: 'Sports' },
+        { value: 'admin', label: 'Admin' },
+        { value: 'editor', label: 'Editor' },
+        { value: 'viewer', label: 'Viewer' },
+      ],
+      required: true,
+      filterable: true,
+      sortable: true,
+    },
+    {
+      name: 'status',
+      label: 'Status',
+      type: 'select',
+      options: [
+        { value: 'active', label: 'Active' },
+        { value: 'inactive', label: 'Inactive' },
+        { value: 'pending', label: 'Pending' },
+      ],
+      required: true,
+      filterable: true,
+      sortable: true,
+    },
+    {
+      name: 'department',
+      label: 'Department',
+      type: 'select',
+      options: [
+        { value: 'engineering', label: 'Engineering' },
+        { value: 'marketing', label: 'Marketing' },
+        { value: 'sales', label: 'Sales' },
+        { value: 'support', label: 'Support' },
       ],
       filterable: true,
+      sortable: true,
     },
-    { name: 'stock', label: 'Stock', type: 'number', required: true },
   ],
 }`}
               language="typescript"
-              title="lib/examples/product-schema.ts"
+              title="lib/examples/user-schema.ts"
             />
           </div>
         </div>
@@ -260,10 +295,10 @@ export default function ProductsPage() {
             💡 Next Steps
           </h3>
           <ul className="mt-2 space-y-1 text-sm text-blue-800 dark:text-blue-300">
-            <li>• Connect to your e-commerce API or database</li>
-            <li>• Add product images and variants (size, color)</li>
-            <li>• Implement low stock alerts and reorder points</li>
-            <li>• Add barcode scanning and bulk import features</li>
+            <li>• Replace MockDataProvider with your actual backend API</li>
+            <li>• Customize the schema to match your user data structure</li>
+            <li>• Add additional fields like avatar, phone, or custom metadata</li>
+            <li>• Implement authentication and authorization logic</li>
           </ul>
         </div>
       </div>
