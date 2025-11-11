@@ -1,7 +1,7 @@
 'use client'
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { useState, useEffect } from 'react'
 
 interface CodeBlockProps {
@@ -90,7 +90,7 @@ export function CodeBlock({
       <div className="overflow-x-auto">
         <SyntaxHighlighter
           language={language}
-          style={isDark ? vscDarkPlus : vs}
+          style={isDark ? oneDark : oneLight}
           showLineNumbers={showLineNumbers}
           customStyle={{
             margin: 0,
