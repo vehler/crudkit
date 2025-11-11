@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "crudkit",
+  "type": "registry:block",
+  "title": "CRUDKit",
+  "description": "Complete CRUD system with compound components, URL state management, and data provider interface. Includes table, form, filters, pagination, sorting, and search.",
+  "dependencies": [
+    "nuqs",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "devDependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/default/crudkit/crudkit/crud-table.tsx",
+      "type": "registry:component",
+      "target": "@/components/crudkit/crud-table.tsx"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit/use-crud.ts",
+      "type": "registry:hook",
+      "target": "@/hooks/use-crud.ts"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit/data-provider.ts",
+      "type": "registry:lib",
+      "target": "@/lib/crudkit/data-provider.ts"
+    }
+  ]
+}

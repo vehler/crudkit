@@ -1,8 +1,11 @@
 {
-  "$schema": "https://shadcn-ui-registry.vercel.app/schema.json",
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "crudkit",
+  "homepage": "http://localhost:3000",
   "styles": ["default"],
   "tailwind": {
     "config": "tailwind.config.js",
     "css": "src/app/globals.css"
-  }
+  },
+  "registry": "registry/index.json"
 }
