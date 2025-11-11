@@ -3,6 +3,7 @@ import { Features } from '@/components/home/features'
 import { CodeExample } from '@/components/home/code-example'
 import { LiveDemo } from '@/components/home/live-demo'
 import { Comparison } from '@/components/home/comparison'
+import { ThemeToggle } from '@/components/theme/theme-toggle'
 import Link from 'next/link'
 
 export default function Home() {
@@ -24,6 +25,12 @@ export default function Home() {
               Docs
             </Link>
             <Link
+              href="/demo"
+              className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+            >
+              Live Demos
+            </Link>
+            <Link
               href="/examples"
               className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
             >
@@ -37,6 +44,7 @@ export default function Home() {
             >
               GitHub
             </a>
+            <ThemeToggle />
           </div>
         </div>
       </nav>
@@ -61,16 +69,16 @@ export default function Home() {
               </p>
               <div className="mt-8 flex justify-center gap-4">
                 <Link
-                  href="/docs"
+                  href="/demo"
                   className="inline-flex h-12 items-center justify-center rounded-lg bg-zinc-900 px-8 text-base font-semibold text-white shadow-lg transition-all hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
                 >
-                  Get Started
+                  Try Live Demos
                 </Link>
                 <Link
-                  href="/examples"
+                  href="/docs"
                   className="inline-flex h-12 items-center justify-center rounded-lg border border-zinc-300 bg-white px-8 text-base font-semibold text-zinc-900 shadow-sm transition-all hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:hover:bg-zinc-800"
                 >
-                  View Examples
+                  Get Started
                 </Link>
               </div>
             </div>
@@ -124,12 +132,20 @@ export default function Home() {
             </div>
             <div>
               <h4 className="mb-4 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-                Examples
+                Demos & Examples
               </h4>
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link
-                    href="/examples/users"
+                    href="/demo"
+                    className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+                  >
+                    Live Demos
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/demo/users"
                     className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
                   >
                     User Management
@@ -137,18 +153,10 @@ export default function Home() {
                 </li>
                 <li>
                   <Link
-                    href="/examples/kanban"
-                    className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
-                  >
-                    Kanban Board
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     href="/examples"
                     className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
                   >
-                    View All
+                    Code Examples
                   </Link>
                 </li>
               </ul>
