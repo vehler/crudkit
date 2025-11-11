@@ -4,6 +4,16 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useCrud, type UseCrudReturn } from '@/hooks/use-crud'
 import type { DataProvider, Schema, Field } from '@/lib/crudkit/data-provider'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Badge } from '@/components/ui/badge'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Skeleton } from '@/components/ui/skeleton'
 
 // ============================================
 // CONTEXT
@@ -61,22 +71,18 @@ function CrudToolbar() {
     >
       <h1 className={cn('text-2xl font-bold')}>{schema.title} Management</h1>
       <div className={cn('flex gap-2')}>
-        <button
+        <Button
           onClick={() => actions.setMode('create')}
-          className={cn(
-            'rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700'
-          )}
+          variant="default"
         >
           + Create New
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => actions.refresh()}
-          className={cn(
-            'rounded border border-gray-300 px-4 py-2 hover:bg-gray-50'
-          )}
+          variant="outline"
         >
           ⟳ Refresh
-        </button>
+        </Button>
       </div>
     </div>
   )
@@ -100,48 +106,54 @@ function CrudFilters({ filterFields }: CrudFiltersProps) {
   if (fields.length === 0) return null
 
   return (
-    <div className={cn('crud-filters', 'mb-4 rounded bg-gray-50 p-4')}>
+    <div className={cn('crud-filters', 'mb-4 rounded bg-muted p-4')}>
       <h3 className={cn('mb-2 font-semibold')}>Filters</h3>
       <div className={cn('flex flex-wrap gap-4')}>
         {fields.map((field) => (
-          <div key={field.name}>
-            <label className={cn('mb-1 block text-sm font-medium')}>
+          <div key={field.name} className="space-y-2">
+            <Label htmlFor={`filter-${field.name}`}>
               {field.label}
-            </label>
+            </Label>
             {field.type === 'select' ? (
-              <select
+              <Select
                 value={state.filters[field.name] || ''}
-                onChange={(e) =>
-                  actions.setFilter(field.name, e.target.value || null)
+                onValueChange={(value) =>
+                  actions.setFilter(field.name, value || null)
                 }
-                className={cn('rounded border border-gray-300 px-2 py-1')}
               >
-                <option value="">All</option>
-                {field.options?.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger id={`filter-${field.name}`} className="w-[180px]">
+                  <SelectValue placeholder="All" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All</SelectItem>
+                  {field.options?.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             ) : (
-              <input
+              <Input
+                id={`filter-${field.name}`}
                 type="text"
                 value={state.filters[field.name] || ''}
                 onChange={(e) =>
                   actions.setFilter(field.name, e.target.value || null)
                 }
-                className={cn('rounded border border-gray-300 px-2 py-1')}
+                className="w-[180px]"
               />
             )}
           </div>
         ))}
         <div className={cn('flex items-end')}>
-          <button
+          <Button
             onClick={() => actions.clearFilters()}
-            className={cn('rounded border border-gray-300 px-3 py-1 text-sm')}
+            variant="outline"
+            size="sm"
           >
             Clear Filters
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -167,67 +179,66 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
   return (
     <div className={cn('crud-list')}>
       {/* Search Bar */}
-      <div className={cn('mb-4')}>
-        <input
+      <div className={cn('mb-4 flex gap-2')}>
+        <Input
           type="text"
           placeholder="Search..."
           value={state.search}
           onChange={(e) => actions.setSearch(e.target.value)}
-          className={cn(
-            'w-80 rounded border border-gray-300 px-3 py-2'
-          )}
+          className="w-80"
         />
         {state.search && (
-          <button
+          <Button
             onClick={() => actions.setSearch('')}
-            className={cn('ml-2 rounded border px-3 py-2')}
+            variant="outline"
           >
             Clear
-          </button>
+          </Button>
         )}
       </div>
 
       {/* Bulk Actions */}
       {state.selectedRows.length > 0 && (
-        <div className={cn('mb-4 rounded bg-gray-100 p-3')}>
-          <span className={cn('mr-4')}>
+        <div className={cn('mb-4 rounded bg-muted p-3 flex items-center gap-4')}>
+          <span>
             {state.selectedRows.length} items selected
           </span>
-          <button
+          <Button
             onClick={() => actions.deleteMany()}
-            className={cn('mr-2 text-red-600 hover:underline')}
+            variant="destructive"
+            size="sm"
           >
             Delete Selected
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => actions.selectRows([])}
-            className={cn('text-gray-600 hover:underline')}
+            variant="ghost"
+            size="sm"
           >
             Clear Selection
-          </button>
+          </Button>
         </div>
       )}
 
       {/* Error Display */}
       {state.error && (
-        <div className={cn('mb-4 rounded bg-red-50 p-3 text-red-700')}>
-          {state.error}
-        </div>
+        <Alert variant="destructive" className="mb-4">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       )}
 
       {/* Table */}
-      <table className={cn('w-full border-collapse')}>
-        <thead>
-          <tr className={cn('border-b-2 border-gray-300')}>
-            <th className={cn('p-2 text-left')}>
-              <input
-                type="checkbox"
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[50px]">
+              <Checkbox
                 checked={
                   state.selectedRows.length === state.data.length &&
                   state.data.length > 0
                 }
-                onChange={(e) => {
-                  if (e.target.checked) {
+                onCheckedChange={(checked) => {
+                  if (checked) {
                     actions.selectRows(
                       state.data.map((item) => item[schema.idField])
                     )
@@ -236,14 +247,13 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
                   }
                 }}
               />
-            </th>
+            </TableHead>
             {displayColumns.map((col) => {
               const field = schema.fields.find((f) => f.name === col)
               return (
-                <th
+                <TableHead
                   key={col}
                   className={cn(
-                    'p-2 text-left',
                     field?.sortable !== false && 'cursor-pointer'
                   )}
                   onClick={() =>
@@ -256,42 +266,44 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
                       {state.sortOrder === 'asc' ? '↑' : '↓'}
                     </span>
                   )}
-                </th>
+                </TableHead>
               )
             })}
-            {showActions && <th className={cn('p-2')}>Actions</th>}
-          </tr>
-        </thead>
-        <tbody>
+            {showActions && <TableHead>Actions</TableHead>}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {state.loading && (
-            <tr>
-              <td
+            <TableRow>
+              <TableCell
                 colSpan={displayColumns.length + 2}
-                className={cn('p-8 text-center')}
+                className="h-24 text-center"
               >
-                Loading...
-              </td>
-            </tr>
+                <div className="flex flex-col items-center gap-2">
+                  <Skeleton className="h-4 w-[200px]" />
+                  <Skeleton className="h-4 w-[150px]" />
+                </div>
+              </TableCell>
+            </TableRow>
           )}
           {!state.loading && state.data.length === 0 && (
-            <tr>
-              <td
+            <TableRow>
+              <TableCell
                 colSpan={displayColumns.length + 2}
-                className={cn('p-8 text-center text-gray-500')}
+                className="h-24 text-center text-muted-foreground"
               >
                 No data found
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           )}
           {!state.loading &&
             state.data.map((item) => (
-              <tr key={item[schema.idField]} className={cn('border-b')}>
-                <td className={cn('p-2')}>
-                  <input
-                    type="checkbox"
+              <TableRow key={item[schema.idField]}>
+                <TableCell>
+                  <Checkbox
                     checked={state.selectedRows.includes(item[schema.idField])}
-                    onChange={(e) => {
-                      if (e.target.checked) {
+                    onCheckedChange={(checked) => {
+                      if (checked) {
                         actions.selectRows([
                           ...state.selectedRows,
                           item[schema.idField],
@@ -305,97 +317,111 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
                       }
                     }}
                   />
-                </td>
+                </TableCell>
                 {displayColumns.map((col) => (
-                  <td key={col} className={cn('p-2')}>
+                  <TableCell key={col}>
                     {item[col]}
-                  </td>
+                  </TableCell>
                 ))}
                 {showActions && (
-                  <td className={cn('p-2')}>
-                    <button
-                      onClick={() =>
-                        actions.setMode('view', item[schema.idField])
-                      }
-                      className={cn('mr-1 text-blue-600 hover:underline')}
-                    >
-                      View
-                    </button>
-                    <button
-                      onClick={() =>
-                        actions.setMode('edit', item[schema.idField])
-                      }
-                      className={cn('mr-1 text-blue-600 hover:underline')}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => actions.delete(item[schema.idField])}
-                      className={cn('text-red-600 hover:underline')}
-                    >
-                      Delete
-                    </button>
-                  </td>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() =>
+                          actions.setMode('view', item[schema.idField])
+                        }
+                        variant="ghost"
+                        size="sm"
+                      >
+                        View
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          actions.setMode('edit', item[schema.idField])
+                        }
+                        variant="ghost"
+                        size="sm"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        onClick={() => actions.delete(item[schema.idField])}
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive hover:text-destructive"
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </TableCell>
                 )}
-              </tr>
+              </TableRow>
             ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
 
       {/* Pagination */}
       <div
         className={cn(
-          'mt-4 flex items-center justify-between rounded bg-gray-50 p-4'
+          'mt-4 flex items-center justify-between rounded bg-muted p-4'
         )}
       >
         <div className={cn('flex items-center gap-4')}>
-          <span>
+          <span className="text-sm">
             Showing {Math.min((state.page - 1) * state.pageSize + 1, state.totalCount)} to{' '}
             {Math.min(state.page * state.pageSize, state.totalCount)} of{' '}
             {state.totalCount} items
           </span>
-          <select
-            value={state.pageSize}
-            onChange={(e) => actions.setPageSize(Number(e.target.value))}
-            className={cn('rounded border px-2 py-1')}
+          <Select
+            value={String(state.pageSize)}
+            onValueChange={(value) => actions.setPageSize(Number(value))}
           >
-            <option value={5}>5 per page</option>
-            <option value={10}>10 per page</option>
-            <option value={25}>25 per page</option>
-            <option value={50}>50 per page</option>
-          </select>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="5">5 per page</SelectItem>
+              <SelectItem value="10">10 per page</SelectItem>
+              <SelectItem value="25">25 per page</SelectItem>
+              <SelectItem value="50">50 per page</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div className={cn('flex items-center gap-1')}>
-          <button
+          <Button
             onClick={() => actions.setPage(1)}
             disabled={state.page === 1}
-            className={cn('rounded border px-2 py-1 disabled:opacity-50')}
+            variant="outline"
+            size="sm"
           >
             ⏮
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => actions.setPage(state.page - 1)}
             disabled={state.page === 1}
-            className={cn('rounded border px-3 py-1 disabled:opacity-50')}
+            variant="outline"
+            size="sm"
           >
             ← Previous
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => actions.setPage(state.page + 1)}
             disabled={state.page * state.pageSize >= state.totalCount}
-            className={cn('rounded border px-3 py-1 disabled:opacity-50')}
+            variant="outline"
+            size="sm"
           >
             Next →
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() =>
               actions.setPage(Math.ceil(state.totalCount / state.pageSize))
             }
             disabled={state.page * state.pageSize >= state.totalCount}
-            className={cn('rounded border px-2 py-1 disabled:opacity-50')}
+            variant="outline"
+            size="sm"
           >
             ⏭
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -462,78 +488,78 @@ function CrudForm({ fields }: CrudFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={cn('max-w-2xl')}>
-      <h2 className={cn('mb-4 text-xl font-bold')}>
+    <form onSubmit={handleSubmit} className={cn('max-w-2xl space-y-6')}>
+      <h2 className={cn('text-xl font-bold')}>
         {state.mode === 'create' ? 'Create' : 'Edit'} {schema.title}
       </h2>
 
       {state.error && (
-        <div className={cn('mb-4 rounded bg-red-50 p-3 text-red-700')}>
-          {state.error}
-        </div>
+        <Alert variant="destructive">
+          <AlertDescription>{state.error}</AlertDescription>
+        </Alert>
       )}
 
       {displayFields.map((field) => (
-        <div key={field.name} className={cn('mb-4')}>
-          <label className={cn('mb-1 block font-medium')}>
+        <div key={field.name} className="space-y-2">
+          <Label htmlFor={`form-${field.name}`}>
             {field.label}
-            {field.required && <span className={cn('text-red-600')}> *</span>}
-          </label>
+            {field.required && <span className="text-destructive"> *</span>}
+          </Label>
 
           {field.type === 'select' ? (
-            <select
+            <Select
               value={formData[field.name] || ''}
-              onChange={(e) => handleChange(field.name, e.target.value)}
-              className={cn('w-full rounded border border-gray-300 px-3 py-2')}
+              onValueChange={(value) => handleChange(field.name, value)}
             >
-              <option value="">Select {field.label}</option>
-              {field.options?.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger id={`form-${field.name}`}>
+                <SelectValue placeholder={`Select ${field.label}`} />
+              </SelectTrigger>
+              <SelectContent>
+                {field.options?.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           ) : field.type === 'textarea' ? (
-            <textarea
+            <Textarea
+              id={`form-${field.name}`}
               value={formData[field.name] || ''}
               onChange={(e) => handleChange(field.name, e.target.value)}
-              className={cn('w-full rounded border border-gray-300 px-3 py-2')}
               rows={4}
             />
           ) : (
-            <input
+            <Input
+              id={`form-${field.name}`}
               type={field.type || 'text'}
               value={formData[field.name] || ''}
               onChange={(e) => handleChange(field.name, e.target.value)}
-              className={cn('w-full rounded border border-gray-300 px-3 py-2')}
             />
           )}
 
           {errors[field.name] && (
-            <span className={cn('text-sm text-red-600')}>
+            <p className="text-sm text-destructive">
               {errors[field.name]}
-            </span>
+            </p>
           )}
         </div>
       ))}
 
-      <div className={cn('mt-6 flex gap-2')}>
-        <button
+      <div className="flex gap-2">
+        <Button
           type="submit"
           disabled={state.loading}
-          className={cn(
-            'rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50'
-          )}
         >
           {state.loading ? 'Saving...' : 'Save'}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={() => actions.setMode('list')}
-          className={cn('rounded border px-4 py-2')}
+          variant="outline"
         >
           Cancel
-        </button>
+        </Button>
       </div>
     </form>
   )
@@ -549,37 +575,47 @@ function CrudView() {
   if (state.mode !== 'view' || !state.currentItem) return null
 
   return (
-    <div className={cn('max-w-2xl')}>
-      <h2 className={cn('mb-4 text-xl font-bold')}>
+    <div className={cn('max-w-2xl space-y-6')}>
+      <h2 className={cn('text-xl font-bold')}>
         View {schema.title}
       </h2>
 
-      {state.loading && <div>Loading...</div>}
-
-      {!state.loading && state.currentItem && (
-        <div>
+      {state.loading && (
+        <div className="space-y-3">
           {schema.fields.map((field) => (
-            <div key={field.name} className={cn('mb-3')}>
-              <strong className={cn('font-medium')}>{field.label}:</strong>{' '}
-              {state.currentItem[field.name] || '-'}
+            <div key={field.name} className="space-y-2">
+              <Skeleton className="h-4 w-[100px]" />
+              <Skeleton className="h-4 w-[250px]" />
             </div>
           ))}
         </div>
       )}
 
-      <div className={cn('mt-6 flex gap-2')}>
-        <button
+      {!state.loading && state.currentItem && (
+        <div className="space-y-3">
+          {schema.fields.map((field) => (
+            <div key={field.name}>
+              <strong className="font-medium">{field.label}:</strong>{' '}
+              <span className="text-muted-foreground">
+                {state.currentItem[field.name] || '-'}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="flex gap-2">
+        <Button
           onClick={() => actions.setMode('edit', state.selectedId)}
-          className={cn('rounded bg-blue-600 px-4 py-2 text-white')}
         >
           Edit
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => actions.setMode('list')}
-          className={cn('rounded border px-4 py-2')}
+          variant="outline"
         >
           Back to List
-        </button>
+        </Button>
       </div>
     </div>
   )

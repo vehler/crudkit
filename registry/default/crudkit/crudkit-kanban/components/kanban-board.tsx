@@ -19,6 +19,9 @@ import {
 // Note: Users will need to ensure proper path resolution
 import { useCrudContext } from '@/components/crudkit/crud-table'
 import { cn } from '@/lib/utils'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 // ============================================
 // TYPES
@@ -180,26 +183,22 @@ function KanbanColumn({
     <div
       ref={setNodeRef}
       className={cn(
-        'flex min-w-[280px] flex-1 flex-col rounded-lg bg-gray-100 p-4 transition-colors',
-        isOver && 'bg-gray-200'
+        'flex min-w-[280px] flex-1 flex-col rounded-lg bg-muted/50 p-4 transition-colors',
+        isOver && 'bg-muted'
       )}
     >
       <div className={cn('mb-4 flex items-center justify-between')}>
         <h3 className={cn('text-lg font-semibold')}>{title}</h3>
-        <span
-          className={cn(
-            'rounded-full bg-gray-200 px-2 py-1 text-sm text-gray-600'
-          )}
-        >
+        <Badge variant="secondary">
           {items.length}
-        </span>
+        </Badge>
       </div>
 
       <div className={cn('flex flex-1 flex-col gap-3')}>
         {items.length === 0 ? (
           <div
             className={cn(
-              'flex flex-1 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-8 text-center text-gray-400'
+              'flex flex-1 items-center justify-center rounded-lg border-2 border-dashed p-8 text-center text-muted-foreground'
             )}
           >
             No items
@@ -252,18 +251,20 @@ function KanbanCard({
   // If custom renderer provided, use it
   if (renderCard) {
     return (
-      <div
+      <Card
         ref={setNodeRef}
         style={style}
         {...listeners}
         {...attributes}
         className={cn(
-          'cursor-move rounded-lg bg-white p-4 shadow-sm transition-shadow hover:shadow-md',
+          'cursor-move transition-opacity hover:shadow-md',
           (isDragging || isDraggingFromHook) && 'opacity-50'
         )}
       >
-        {renderCard(item)}
-      </div>
+        <CardContent className="p-4">
+          {renderCard(item)}
+        </CardContent>
+      </Card>
     )
   }
 
@@ -276,50 +277,49 @@ function KanbanCard({
   )
 
   return (
-    <div
+    <Card
       ref={setNodeRef}
       style={style}
       {...listeners}
       {...attributes}
       className={cn(
-        'cursor-move rounded-lg bg-white p-4 shadow-sm transition-shadow hover:shadow-md',
+        'cursor-move transition-opacity hover:shadow-md',
         (isDragging || isDraggingFromHook) && 'opacity-50'
       )}
     >
-      <div className={cn('mb-2 font-semibold')}>
-        {titleField ? item[titleField.name] : item[schema.idField]}
-      </div>
+      <CardHeader className="p-4 pb-3">
+        <CardTitle className="text-base">
+          {titleField ? item[titleField.name] : item[schema.idField]}
+        </CardTitle>
+        {descriptionField && item[descriptionField.name] && (
+          <CardDescription className="text-sm">
+            {item[descriptionField.name]}
+          </CardDescription>
+        )}
+      </CardHeader>
 
-      {descriptionField && item[descriptionField.name] && (
-        <div className={cn('mb-3 text-sm text-gray-600')}>
-          {item[descriptionField.name]}
-        </div>
-      )}
-
-      <div className={cn('flex gap-2')}>
-        <button
+      <CardFooter className="p-4 pt-0 flex gap-2">
+        <Button
           onClick={(e) => {
             e.stopPropagation()
             actions.setMode('view', item[schema.idField])
           }}
-          className={cn(
-            'rounded bg-blue-50 px-2 py-1 text-xs text-blue-600 hover:bg-blue-100'
-          )}
+          variant="ghost"
+          size="sm"
         >
           View
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={(e) => {
             e.stopPropagation()
             actions.setMode('edit', item[schema.idField])
           }}
-          className={cn(
-            'rounded bg-gray-50 px-2 py-1 text-xs text-gray-600 hover:bg-gray-100'
-          )}
+          variant="ghost"
+          size="sm"
         >
           Edit
-        </button>
-      </div>
-    </div>
+        </Button>
+      </CardFooter>
+    </Card>
   )
 }
