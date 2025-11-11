@@ -116,7 +116,7 @@ function CrudFilters({ filterFields }: CrudFiltersProps) {
             </Label>
             {field.type === 'select' ? (
               <Select
-                value={state.filters[field.name] || ''}
+                value={state.filters[field.name] || undefined}
                 onValueChange={(value) =>
                   actions.setFilter(field.name, value || null)
                 }
@@ -125,7 +125,6 @@ function CrudFilters({ filterFields }: CrudFiltersProps) {
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
                   {field.options?.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
@@ -508,7 +507,7 @@ function CrudForm({ fields }: CrudFormProps) {
 
           {field.type === 'select' ? (
             <Select
-              value={formData[field.name] || ''}
+              value={formData[field.name] || undefined}
               onValueChange={(value) => handleChange(field.name, value)}
             >
               <SelectTrigger id={`form-${field.name}`}>
