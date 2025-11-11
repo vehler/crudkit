@@ -1,36 +1,186 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CRUDKit
 
-## Getting Started
+**Build CRUD Applications at Lightning Speed**
 
-First, run the development server:
+A shadcn-based component registry for Next.js. Copy, paste, and customize. Built with TypeScript, Tailwind CSS, and best practices.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+## Features
+
+- ⚡ **Fast to Implement** - Add complete CRUD functionality in minutes
+- 🎨 **Fully Customizable** - Own your code, extend and modify components
+- 🔌 **Provider Agnostic** - Works with any backend (REST, GraphQL, tRPC)
+- 🧩 **Compound Components** - Flexible composition pattern
+- 🔗 **URL State Management** - Built-in with nuqs
+- 📘 **TypeScript First** - Full type safety
+- 🎯 **Drag & Drop Support** - Kanban boards with dnd-kit
+- ♿ **Accessible** - Built with best practices
+- 🌙 **Dark Mode Ready** - Tailwind CSS powered
+
+## Quick Start
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install shadcn/ui (if you haven't already)
+npx shadcn@latest init
+
+# Install dependencies
+npm install nuqs clsx tailwind-merge
+
+# Add CRUDKit components
+npx shadcn add https://crudkit.dev/r/crudkit
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Basic Usage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```tsx
+import { Crud } from '@/components/crudkit/crud-table'
+import { userSchema } from '@/lib/user-schema'
+import { dataProvider } from '@/lib/data-provider'
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+export default function UsersPage() {
+  return (
+    <Crud schema={userSchema} dataProvider={dataProvider}>
+      <Crud.Toolbar />
+      <Crud.Filters />
+      <Crud.List />
+      <Crud.Form />
+      <Crud.View />
+    </Crud>
+  )
+}
+```
 
-## Learn More
+## Documentation
 
-To learn more about Next.js, take a look at the following resources:
+- [Installation Guide](https://crudkit.dev/docs/installation)
+- [Quick Start Tutorial](https://crudkit.dev/docs/quick-start)
+- [Full Documentation](https://crudkit.dev/docs)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Examples
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [User Management](https://crudkit.dev/examples/users) - Complete CRUD with filtering and pagination
+- [Kanban Board](https://crudkit.dev/examples/kanban) - Drag-and-drop task management
+- [View All Examples](https://crudkit.dev/examples)
 
-## Deploy on Vercel
+## What's Included
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Core Components
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Crud** - Main wrapper with context provider
+- **Crud.Toolbar** - Action bar with create and refresh buttons
+- **Crud.Filters** - Dynamic filters based on schema
+- **Crud.List** - Data table with sorting, search, and pagination
+- **Crud.Form** - Create/Edit forms with validation
+- **Crud.View** - Read-only detail view
+
+### Plugins
+
+- **Kanban Board** - Drag-and-drop board view (dnd-kit)
+
+### Hooks
+
+- **useCrud** - Core hook for state management and CRUD operations
+
+### Utilities
+
+- **DataProvider** - Interface for backend integration
+- **Schema** - Type-safe schema definition
+
+## Architecture
+
+CRUDKit follows the shadcn/ui philosophy: components live in your codebase, not as npm dependencies. This means:
+
+- ✅ Full control over the code
+- ✅ No version lock-in
+- ✅ Easy customization
+- ✅ Only bundle what you use
+- ✅ No proprietary dependencies
+
+## Tech Stack
+
+- **Next.js 15** - App Router
+- **React 19** - Latest features
+- **TypeScript** - Type safety
+- **Tailwind CSS 4** - Styling
+- **nuqs** - URL state management
+- **dnd-kit** - Drag and drop
+- **Vitest** - Testing
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Run tests
+npm test
+
+# Build registry
+npm run registry:build
+
+# Format code
+npm run format
+
+# Lint code
+npm run lint
+```
+
+## Project Structure
+
+```
+crudkit/
+├── src/
+│   ├── app/                    # Next.js app pages
+│   │   ├── (home)/            # Homepage
+│   │   ├── docs/              # Documentation pages
+│   │   └── examples/          # Example applications
+│   └── components/
+│       ├── home/              # Homepage components
+│       └── docs/              # Documentation components
+├── registry/                   # shadcn registry
+│   └── default/
+│       └── crudkit/           # Component definitions
+│           ├── crudkit/       # Core components
+│           ├── crudkit-kanban/    # Kanban plugin
+│           ├── crudkit-example-users/
+│           └── crudkit-example-kanban/
+└── __tests__/                 # Test files
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Built with [Next.js](https://nextjs.org/)
+- Inspired by [shadcn/ui](https://ui.shadcn.com/)
+- Component patterns from [React-Admin](https://marmelab.com/react-admin/) and [Refine](https://refine.dev/)
+
+## Links
+
+- [Website](https://crudkit.dev)
+- [Documentation](https://crudkit.dev/docs)
+- [Examples](https://crudkit.dev/examples)
+- [GitHub](https://github.com/vehler/crudkit)
+- [Issues](https://github.com/vehler/crudkit/issues)
+
+---
+
+**Built with ❤️ by the CRUDKit team**
