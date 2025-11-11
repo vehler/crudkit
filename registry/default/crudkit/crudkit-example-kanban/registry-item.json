@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "crudkit-example-kanban",
+  "type": "registry:block",
+  "title": "CRUDKit Kanban Board Example",
+  "description": "Complete working example of task management with Kanban view. Shows how to use CRUDKit with the kanban plugin, including view mode switching between table and kanban.",
+  "dependencies": [],
+  "devDependencies": [],
+  "registryDependencies": ["crudkit", "crudkit-kanban"],
+  "files": [
+    {
+      "path": "registry/default/crudkit/crudkit-example-kanban/page.tsx",
+      "type": "registry:page",
+      "target": "app/examples/kanban/page.tsx"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-kanban/task-schema.ts",
+      "type": "registry:lib",
+      "target": "@/lib/examples/task-schema.ts"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-kanban/mock-tasks.ts",
+      "type": "registry:lib",
+      "target": "@/lib/examples/mock-tasks.ts"
+    }
+  ]
+}

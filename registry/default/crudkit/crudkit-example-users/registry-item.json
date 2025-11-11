@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "crudkit-example-users",
+  "type": "registry:block",
+  "title": "CRUDKit User Management Example",
+  "description": "Complete working example of user management with CRUDKit. Includes schema, mock data, and mock data provider implementation. Shows table view with search, filters, sorting, and pagination.",
+  "dependencies": [],
+  "devDependencies": [],
+  "registryDependencies": ["crudkit"],
+  "files": [
+    {
+      "path": "registry/default/crudkit/crudkit-example-users/page.tsx",
+      "type": "registry:page",
+      "target": "app/examples/users/page.tsx"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-users/user-schema.ts",
+      "type": "registry:lib",
+      "target": "@/lib/examples/user-schema.ts"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-users/mock-users.ts",
+      "type": "registry:lib",
+      "target": "@/lib/examples/mock-users.ts"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-users/mock-data-provider.ts",
+      "type": "registry:lib",
+      "target": "@/lib/examples/mock-data-provider.ts"
+    }
+  ]
+}

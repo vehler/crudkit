@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "crudkit-kanban",
+  "type": "registry:block",
+  "title": "CRUDKit Kanban Plugin",
+  "description": "Kanban board renderer for CRUDKit with drag-and-drop support using @dnd-kit. Allows grouping data by any field with customizable columns.",
+  "dependencies": [
+    "@dnd-kit/core",
+    "@dnd-kit/sortable",
+    "@dnd-kit/utilities"
+  ],
+  "devDependencies": [],
+  "registryDependencies": ["crudkit"],
+  "files": [
+    {
+      "path": "registry/default/crudkit/crudkit-kanban/kanban-board.tsx",
+      "type": "registry:component",
+      "target": "@/components/crudkit/kanban-board.tsx"
+    }
+  ]
+}

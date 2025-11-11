@@ -1,0 +1,102 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "crudkit",
+  "homepage": "http://localhost:3000",
+  "items": [
+    {
+      "name": "crudkit",
+      "type": "registry:block",
+      "title": "CRUDKit",
+      "description": "Complete CRUD system with compound components, URL state management, and data provider interface.",
+      "registryDependencies": [],
+      "dependencies": ["nuqs", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "registry/default/crudkit/crudkit/crud-table.tsx",
+          "type": "registry:component",
+          "target": "@/components/crudkit/crud-table.tsx"
+        },
+        {
+          "path": "registry/default/crudkit/crudkit/use-crud.ts",
+          "type": "registry:hook",
+          "target": "@/hooks/use-crud.ts"
+        },
+        {
+          "path": "registry/default/crudkit/crudkit/data-provider.ts",
+          "type": "registry:lib",
+          "target": "@/lib/crudkit/data-provider.ts"
+        }
+      ]
+    },
+    {
+      "name": "crudkit-kanban",
+      "type": "registry:block",
+      "title": "CRUDKit Kanban Plugin",
+      "description": "Kanban board renderer for CRUDKit with drag-and-drop support.",
+      "registryDependencies": ["crudkit"],
+      "dependencies": ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities"],
+      "files": [
+        {
+          "path": "registry/default/crudkit/crudkit-kanban/kanban-board.tsx",
+          "type": "registry:component",
+          "target": "@/components/crudkit/kanban-board.tsx"
+        }
+      ]
+    },
+    {
+      "name": "crudkit-example-users",
+      "type": "registry:block",
+      "title": "CRUDKit User Management Example",
+      "description": "Complete working example of user management with CRUDKit.",
+      "registryDependencies": ["crudkit"],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/default/crudkit/crudkit-example-users/page.tsx",
+          "type": "registry:page",
+          "target": "app/examples/users/page.tsx"
+        },
+        {
+          "path": "registry/default/crudkit/crudkit-example-users/user-schema.ts",
+          "type": "registry:lib",
+          "target": "@/lib/examples/user-schema.ts"
+        },
+        {
+          "path": "registry/default/crudkit/crudkit-example-users/mock-users.ts",
+          "type": "registry:lib",
+          "target": "@/lib/examples/mock-users.ts"
+        },
+        {
+          "path": "registry/default/crudkit/crudkit-example-users/mock-data-provider.ts",
+          "type": "registry:lib",
+          "target": "@/lib/examples/mock-data-provider.ts"
+        }
+      ]
+    },
+    {
+      "name": "crudkit-example-kanban",
+      "type": "registry:block",
+      "title": "CRUDKit Kanban Board Example",
+      "description": "Complete working example of task management with Kanban view.",
+      "registryDependencies": ["crudkit", "crudkit-kanban"],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/default/crudkit/crudkit-example-kanban/page.tsx",
+          "type": "registry:page",
+          "target": "app/examples/kanban/page.tsx"
+        },
+        {
+          "path": "registry/default/crudkit/crudkit-example-kanban/task-schema.ts",
+          "type": "registry:lib",
+          "target": "@/lib/examples/task-schema.ts"
+        },
+        {
+          "path": "registry/default/crudkit/crudkit-example-kanban/mock-tasks.ts",
+          "type": "registry:lib",
+          "target": "@/lib/examples/mock-tasks.ts"
+        }
+      ]
+    }
+  ]
+}
