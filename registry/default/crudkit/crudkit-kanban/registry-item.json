@@ -3,17 +3,17 @@
   "name": "crudkit-kanban",
   "type": "registry:block",
   "title": "CRUDKit Kanban Plugin",
-  "description": "Kanban board renderer for CRUDKit with drag-and-drop support using @dnd-kit. Allows grouping data by any field with customizable columns.",
+  "description": "Kanban board view plugin for CRUDKit that renders data as draggable cards organized in columns. Uses @dnd-kit for smooth drag-and-drop interactions. Supports grouping data by any field (e.g., status, priority, assignee), customizable column definitions, drag-to-update functionality, custom card renderers, responsive layout, and keyboard navigation. Integrates seamlessly with CRUDKit's data provider pattern. Ideal for task management, project tracking, workflow management, and any application needing a visual board interface.",
   "dependencies": [
-    "@dnd-kit/core",
-    "@dnd-kit/sortable",
-    "@dnd-kit/utilities"
+    "@dnd-kit/core@^6.3.0",
+    "@dnd-kit/sortable@^10.0.0",
+    "@dnd-kit/utilities@^3.2.0"
   ],
   "devDependencies": [],
-  "registryDependencies": ["crudkit"],
+  "registryDependencies": ["crudkit", "card", "badge"],
   "files": [
     {
-      "path": "registry/default/crudkit/crudkit-kanban/kanban-board.tsx",
+      "path": "registry/default/crudkit/crudkit-kanban/components/kanban-board.tsx",
       "type": "registry:component",
       "target": "@/components/crudkit/kanban-board.tsx"
     }

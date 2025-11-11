@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "crudkit-example-blog",
+  "type": "registry:block",
+  "title": "CRUDKit Blog/CMS Example",
+  "description": "Complete working example of blog/content management system with CRUDKit. Includes post schema with title, author, category, status workflow (draft, published, archived), publish date, excerpt, and full content fields. Features 10+ mock blog posts across 5 categories (Technology, Business, Lifestyle, Travel, Food). Demonstrates content publishing workflow, category-based organization, author filtering, and publication scheduling. Perfect for building content management systems, blog platforms, knowledge bases, and article publishing workflows.",
+  "registryDependencies": ["crudkit"],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/default/crudkit/crudkit-example-blog/page.tsx",
+      "type": "registry:page",
+      "target": "app/examples/blog/page.tsx"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-blog/lib/post-schema.ts",
+      "type": "registry:lib",
+      "target": "@/lib/examples/post-schema.ts"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-blog/lib/mock-posts.ts",
+      "type": "registry:lib",
+      "target": "@/lib/examples/mock-posts.ts"
+    }
+  ]
+}

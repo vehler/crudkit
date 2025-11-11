@@ -1,0 +1,148 @@
+export const mockActivities = [
+  {
+    id: '1',
+    user: 'John Doe',
+    action: 'login',
+    resource: 'Dashboard',
+    timestamp: '2024-11-11T08:30:00',
+  },
+  {
+    id: '2',
+    user: 'Jane Smith',
+    action: 'create',
+    resource: 'Product #1234',
+    timestamp: '2024-11-11T08:45:00',
+  },
+  {
+    id: '3',
+    user: 'Mike Johnson',
+    action: 'update',
+    resource: 'Order #5678',
+    timestamp: '2024-11-11T09:15:00',
+  },
+  {
+    id: '4',
+    user: 'Sarah Williams',
+    action: 'delete',
+    resource: 'User #9012',
+    timestamp: '2024-11-11T09:30:00',
+  },
+  {
+    id: '5',
+    user: 'John Doe',
+    action: 'logout',
+    resource: 'Dashboard',
+    timestamp: '2024-11-11T10:00:00',
+  },
+  {
+    id: '6',
+    user: 'Emily Brown',
+    action: 'create',
+    resource: 'Blog Post',
+    timestamp: '2024-11-11T10:15:00',
+  },
+  {
+    id: '7',
+    user: 'David Lee',
+    action: 'update',
+    resource: 'Settings',
+    timestamp: '2024-11-11T10:45:00',
+  },
+  {
+    id: '8',
+    user: 'Jane Smith',
+    action: 'login',
+    resource: 'Dashboard',
+    timestamp: '2024-11-11T11:00:00',
+  },
+]
+
+export const mockMetrics = [
+  {
+    id: '1',
+    name: 'Total Users',
+    value: 1247,
+    unit: 'users',
+    trend: 'up',
+  },
+  {
+    id: '2',
+    name: 'Revenue',
+    value: 45620,
+    unit: 'USD',
+    trend: 'up',
+  },
+  {
+    id: '3',
+    name: 'Active Orders',
+    value: 89,
+    unit: 'orders',
+    trend: 'stable',
+  },
+  {
+    id: '4',
+    name: 'Page Views',
+    value: 23456,
+    unit: 'views',
+    trend: 'up',
+  },
+  {
+    id: '5',
+    name: 'Conversion Rate',
+    value: 3.2,
+    unit: '%',
+    trend: 'down',
+  },
+  {
+    id: '6',
+    name: 'Support Tickets',
+    value: 12,
+    unit: 'tickets',
+    trend: 'down',
+  },
+]
+
+export const mockQuickTasks = [
+  {
+    id: '1',
+    task: 'Review pending orders',
+    priority: 'high',
+    status: 'pending',
+    dueDate: '2024-11-12',
+  },
+  {
+    id: '2',
+    task: 'Update product inventory',
+    priority: 'high',
+    status: 'in-progress',
+    dueDate: '2024-11-12',
+  },
+  {
+    id: '3',
+    task: 'Process refund requests',
+    priority: 'medium',
+    status: 'pending',
+    dueDate: '2024-11-13',
+  },
+  {
+    id: '4',
+    task: 'Respond to customer inquiries',
+    priority: 'medium',
+    status: 'in-progress',
+    dueDate: '2024-11-13',
+  },
+  {
+    id: '5',
+    task: 'Generate monthly report',
+    priority: 'low',
+    status: 'pending',
+    dueDate: '2024-11-15',
+  },
+  {
+    id: '6',
+    task: 'Review analytics',
+    priority: 'low',
+    status: 'completed',
+    dueDate: '2024-11-11',
+  },
+]

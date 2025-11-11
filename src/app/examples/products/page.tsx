@@ -53,8 +53,28 @@ export default function ProductsPage() {
 
       {/* Content */}
       <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        {/* Installation */}
+        <div className="rounded-lg border bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+            Installation
+          </h2>
+          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+            Install the CRUDKit products example using the CLI
+          </p>
+          <div className="mt-4">
+            <CodeBlock
+              code={`npx shadcn add https://crudkit.dev/r/crudkit-example-products`}
+              language="bash"
+              title="CLI"
+            />
+          </div>
+          <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
+            This will install all required files including the page component, product schema, and 15+ mock products across 5 categories.
+          </p>
+        </div>
+
         {/* Demo Preview */}
-        <div className="rounded-lg border bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="mt-8 rounded-lg border bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
               Product Management System
@@ -159,10 +179,55 @@ export default function ProductsPage() {
           </div>
         </div>
 
-        {/* Code Example */}
-        <div className="mt-8">
-          <CodeBlock
-            code={`const productSchema = {
+        {/* Usage */}
+        <div className="mt-8 rounded-lg border bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+            Usage
+          </h2>
+          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+            After installation, use the products example in your application:
+          </p>
+          <div className="mt-4">
+            <CodeBlock
+              code={`'use client'
+
+import { Crud } from '@/components/crudkit/crud-table'
+import { MockDataProvider } from '@/lib/examples/mock-data-provider'
+import { productSchema } from '@/lib/examples/product-schema'
+import { mockProducts } from '@/lib/examples/mock-products'
+
+const productDataProvider = new MockDataProvider(mockProducts)
+
+export default function ProductsPage() {
+  return (
+    <div className="container mx-auto py-8">
+      <Crud schema={productSchema} dataProvider={productDataProvider}>
+        <Crud.Toolbar />
+        <Crud.Filters />
+        <Crud.List columns={['name', 'sku', 'category', 'price', 'stock', 'status']} />
+        <Crud.Form />
+        <Crud.View />
+      </Crud>
+    </div>
+  )
+}`}
+              language="typescript"
+              title="app/examples/products/page.tsx"
+            />
+          </div>
+        </div>
+
+        {/* Schema Definition */}
+        <div className="mt-8 rounded-lg border bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+            Schema Definition
+          </h2>
+          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+            Define your product catalog structure:
+          </p>
+          <div className="mt-4">
+            <CodeBlock
+              code={`const productSchema = {
   title: 'Product',
   idField: 'id',
   fields: [
@@ -183,9 +248,23 @@ export default function ProductsPage() {
     { name: 'stock', label: 'Stock', type: 'number', required: true },
   ],
 }`}
-            language="typescript"
-            title="Schema Definition"
-          />
+              language="typescript"
+              title="lib/examples/product-schema.ts"
+            />
+          </div>
+        </div>
+
+        {/* Next Steps */}
+        <div className="mt-8 rounded-lg border border-blue-200 bg-blue-50 p-6 dark:border-blue-900/30 dark:bg-blue-900/10">
+          <h3 className="font-semibold text-blue-900 dark:text-blue-400">
+            💡 Next Steps
+          </h3>
+          <ul className="mt-2 space-y-1 text-sm text-blue-800 dark:text-blue-300">
+            <li>• Connect to your e-commerce API or database</li>
+            <li>• Add product images and variants (size, color)</li>
+            <li>• Implement low stock alerts and reorder points</li>
+            <li>• Add barcode scanning and bulk import features</li>
+          </ul>
         </div>
       </div>
     </div>

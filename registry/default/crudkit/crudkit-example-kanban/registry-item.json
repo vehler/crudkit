@@ -14,12 +14,12 @@
       "target": "app/examples/kanban/page.tsx"
     },
     {
-      "path": "registry/default/crudkit/crudkit-example-kanban/task-schema.ts",
+      "path": "registry/default/crudkit/crudkit-example-kanban/lib/task-schema.ts",
       "type": "registry:lib",
       "target": "@/lib/examples/task-schema.ts"
     },
     {
-      "path": "registry/default/crudkit/crudkit-example-kanban/mock-tasks.ts",
+      "path": "registry/default/crudkit/crudkit-example-kanban/lib/mock-tasks.ts",
       "type": "registry:lib",
       "target": "@/lib/examples/mock-tasks.ts"
     }

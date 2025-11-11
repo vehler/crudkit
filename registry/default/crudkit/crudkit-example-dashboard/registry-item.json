@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "crudkit-example-dashboard",
+  "type": "registry:block",
+  "title": "CRUDKit Multi-Widget Dashboard Example",
+  "description": "Complete working example of multi-widget dashboard using multiple CRUDKit instances. Demonstrates how to compose multiple independent CRUD interfaces on a single page with different data sources and schemas. Includes three dashboard widgets: Recent Activity log (user actions, timestamps), Key Metrics display (analytics, trends), and Quick Tasks manager (task list with priorities and status). Shows responsive grid layout, selective component usage (some widgets show only List, others include Toolbar and Filters), and independent data providers per widget. Perfect for building admin dashboards, analytics interfaces, monitoring panels, and multi-section data management pages.",
+  "registryDependencies": ["crudkit"],
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/default/crudkit/crudkit-example-dashboard/page.tsx",
+      "type": "registry:page",
+      "target": "app/examples/dashboard/page.tsx"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-dashboard/lib/dashboard-schemas.ts",
+      "type": "registry:lib",
+      "target": "@/lib/examples/dashboard-schemas.ts"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-dashboard/lib/mock-dashboard-data.ts",
+      "type": "registry:lib",
+      "target": "@/lib/examples/mock-dashboard-data.ts"
+    }
+  ]
+}

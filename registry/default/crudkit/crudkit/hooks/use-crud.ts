@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useQueryStates, parseAsString, parseAsInteger, parseAsJson } from 'nuqs'
-import type { DataProvider, GetListParams, Schema } from './data-provider'
+import type { DataProvider, GetListParams, Schema } from '@/lib/crudkit/data-provider'
 
 // ============================================
 // TYPES
