@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "crudkit-example-orders",
+  "type": "registry:block",
+  "title": "CRUDKit Order Management Example",
+  "description": "Complete working example of order management system with CRUDKit. Includes order schema with order number, customer details, email, total amount, status workflow, order date, and items list. Features 10+ mock orders demonstrating various order statuses (pending, processing, shipped, delivered, cancelled). Shows filtering by status, sorting by date/amount, date range capabilities, and order lifecycle management. Perfect for building e-commerce order management, fulfillment systems, and customer order tracking interfaces.",
+  "dependencies": [],
+  "registryDependencies": [
+    "crudkit"
+  ],
+  "files": [
+    {
+      "path": "registry/default/crudkit/crudkit-example-orders/page.tsx",
+      "content": "'use client'\n\nimport { Crud } from '@/components/crudkit/crud-table'\nimport { MockDataProvider } from '@/lib/examples/mock-data-provider'\nimport { orderSchema } from '@/lib/examples/order-schema'\nimport { mockOrders } from '@/lib/examples/mock-orders'\n\n// Create data provider instance\nconst orderDataProvider = new MockDataProvider(mockOrders)\n\nexport default function OrdersPage() {\n  return (\n    <div className=\"container mx-auto py-8\">\n      <Crud schema={orderSchema} dataProvider={orderDataProvider}>\n        <Crud.Toolbar />\n        <Crud.Filters />\n        <Crud.List columns={['orderNumber', 'customer', 'total', 'status', 'date']} />\n        <Crud.Form />\n        <Crud.View />\n      </Crud>\n    </div>\n  )\n}\n",
+      "type": "registry:page",
+      "target": "app/examples/orders/page.tsx"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-orders/lib/order-schema.ts",
+      "content": "import type { Schema } from '@/lib/crudkit/data-provider'\n\nexport const orderSchema: Schema = {\n  title: 'Order',\n  idField: 'id',\n  fields: [\n    {\n      name: 'orderNumber',\n      label: 'Order Number',\n      type: 'text',\n      required: true,\n      sortable: true,\n    },\n    {\n      name: 'customer',\n      label: 'Customer Name',\n      type: 'text',\n      required: true,\n      sortable: true,\n    },\n    {\n      name: 'email',\n      label: 'Customer Email',\n      type: 'email',\n      required: true,\n    },\n    {\n      name: 'total',\n      label: 'Total Amount ($)',\n      type: 'number',\n      required: true,\n      sortable: true,\n    },\n    {\n      name: 'status',\n      label: 'Status',\n      type: 'select',\n      options: [\n        { value: 'pending', label: 'Pending' },\n        { value: 'processing', label: 'Processing' },\n        { value: 'shipped', label: 'Shipped' },\n        { value: 'delivered', label: 'Delivered' },\n        { value: 'cancelled', label: 'Cancelled' },\n      ],\n      required: true,\n      filterable: true,\n      sortable: true,\n    },\n    {\n      name: 'date',\n      label: 'Order Date',\n      type: 'date',\n      required: true,\n      sortable: true,\n    },\n    {\n      name: 'items',\n      label: 'Items',\n      type: 'text',\n      showOnCreate: true,\n      showOnEdit: true,\n    },\n  ],\n}\n",
+      "type": "registry:lib",
+      "target": "@/lib/examples/order-schema.ts"
+    },
+    {
+      "path": "registry/default/crudkit/crudkit-example-orders/lib/mock-orders.ts",
+      "content": "export const mockOrders = [\n  {\n    id: '1',\n    orderNumber: 'ORD-2024-001',\n    customer: 'John Smith',\n    email: 'john.smith@email.com',\n    total: 299.97,\n    status: 'delivered',\n    date: '2024-01-15',\n    items: 'Wireless Headphones, Smart Watch',\n  },\n  {\n    id: '2',\n    orderNumber: 'ORD-2024-002',\n    customer: 'Sarah Johnson',\n    email: 'sarah.j@email.com',\n    total: 149.98,\n    status: 'shipped',\n    date: '2024-01-18',\n    items: 'Cotton T-Shirt x2, Running Shoes',\n  },\n  {\n    id: '3',\n    orderNumber: 'ORD-2024-003',\n    customer: 'Michael Brown',\n    email: 'mbrown@email.com',\n    total: 79.99,\n    status: 'processing',\n    date: '2024-01-20',\n    items: 'Yoga Mat, Water Bottle',\n  },\n  {\n    id: '4',\n    orderNumber: 'ORD-2024-004',\n    customer: 'Emily Davis',\n    email: 'emily.d@email.com',\n    total: 524.96,\n    status: 'pending',\n    date: '2024-01-22',\n    items: 'Laptop Stand, Wireless Mouse, Keyboard',\n  },\n  {\n    id: '5',\n    orderNumber: 'ORD-2024-005',\n    customer: 'David Wilson',\n    email: 'dwilson@email.com',\n    total: 199.99,\n    status: 'cancelled',\n    date: '2024-01-23',\n    items: 'Coffee Maker',\n  },\n  {\n    id: '6',\n    orderNumber: 'ORD-2024-006',\n    customer: 'Lisa Martinez',\n    email: 'lisa.m@email.com',\n    total: 89.99,\n    status: 'delivered',\n    date: '2024-01-25',\n    items: 'Novel, Cookbook',\n  },\n  {\n    id: '7',\n    orderNumber: 'ORD-2024-007',\n    customer: 'James Taylor',\n    email: 'jtaylor@email.com',\n    total: 449.97,\n    status: 'shipped',\n    date: '2024-01-26',\n    items: 'Tennis Racket, Dumbbells Set, Yoga Mat',\n  },\n  {\n    id: '8',\n    orderNumber: 'ORD-2024-008',\n    customer: 'Jennifer White',\n    email: 'jwhite@email.com',\n    total: 169.98,\n    status: 'processing',\n    date: '2024-01-27',\n    items: 'Winter Jacket',\n  },\n  {\n    id: '9',\n    orderNumber: 'ORD-2024-009',\n    customer: 'Robert Garcia',\n    email: 'rgarcia@email.com',\n    total: 59.99,\n    status: 'pending',\n    date: '2024-01-28',\n    items: 'Denim Jeans',\n  },\n  {\n    id: '10',\n    orderNumber: 'ORD-2024-010',\n    customer: 'Maria Rodriguez',\n    email: 'maria.r@email.com',\n    total: 129.98,\n    status: 'delivered',\n    date: '2024-01-29',\n    items: 'Garden Hose, Plant Pots',\n  },\n]\n",
+      "type": "registry:lib",
+      "target": "@/lib/examples/mock-orders.ts"
+    }
+  ]
+}

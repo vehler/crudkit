@@ -61,9 +61,17 @@ export default function UsersPage() {
 
 ## Examples
 
-- [User Management](https://crudkit.dev/examples/users) - Complete CRUD with filtering and pagination
-- [Kanban Board](https://crudkit.dev/examples/kanban) - Drag-and-drop task management
-- [View All Examples](https://crudkit.dev/examples)
+CRUDKit includes 7 complete, working examples demonstrating various use cases:
+
+- **[User Management](https://crudkit.dev/examples/users)** - Complete CRUD with filtering, pagination, and 50+ mock users
+- **[Kanban Board](https://crudkit.dev/examples/kanban)** - Drag-and-drop task management with status columns
+- **[E-commerce Products](https://crudkit.dev/examples/products)** - Product catalog with inventory tracking and categories
+- **[Order Management](https://crudkit.dev/examples/orders)** - Order fulfillment system with status workflow
+- **[Blog/CMS](https://crudkit.dev/examples/blog)** - Content management with publishing workflow
+- **[Settings Management](https://crudkit.dev/examples/settings)** - Application configuration and preferences
+- **[Multi-Widget Dashboard](https://crudkit.dev/examples/dashboard)** - Multiple CRUDKit instances on one page
+
+[View All Examples](https://crudkit.dev/examples)
 
 ## What's Included
 
@@ -76,9 +84,16 @@ export default function UsersPage() {
 - **Crud.Form** - Create/Edit forms with validation
 - **Crud.View** - Read-only detail view
 
+All CRUDKit components are built on top of **shadcn/ui base components**, including:
+
+- Button, Input, Label, Select, Textarea (forms)
+- Table components (data display)
+- Badge, Card, Alert, Skeleton (UI feedback)
+- Checkbox (selections)
+
 ### Plugins
 
-- **Kanban Board** - Drag-and-drop board view (dnd-kit)
+- **Kanban Board** - Drag-and-drop board view powered by @dnd-kit
 
 ### Hooks
 
@@ -86,8 +101,9 @@ export default function UsersPage() {
 
 ### Utilities
 
-- **DataProvider** - Interface for backend integration
-- **Schema** - Type-safe schema definition
+- **DataProvider** - Interface for backend integration (REST, GraphQL, tRPC)
+- **Schema** - Type-safe schema definition with field configuration
+- **MockDataProvider** - In-memory data provider for examples and prototyping
 
 ## Architecture
 
@@ -101,12 +117,14 @@ CRUDKit follows the shadcn/ui philosophy: components live in your codebase, not 
 
 ## Tech Stack
 
-- **Next.js 15** - App Router
+- **Next.js 16** - App Router
 - **React 19** - Latest features
 - **TypeScript** - Type safety
-- **Tailwind CSS 4** - Styling
-- **nuqs** - URL state management
-- **dnd-kit** - Drag and drop
+- **shadcn/ui** - Base component library
+- **Radix UI** - Accessible primitives
+- **Tailwind CSS 4** - Styling with CSS variables
+- **nuqs 2.7+** - URL state management
+- **@dnd-kit** - Drag and drop
 - **Vitest** - Testing
 
 ## Development
@@ -136,21 +154,32 @@ npm run lint
 ```
 crudkit/
 ├── src/
-│   ├── app/                    # Next.js app pages
-│   │   ├── (home)/            # Homepage
-│   │   ├── docs/              # Documentation pages
-│   │   └── examples/          # Example applications
-│   └── components/
-│       ├── home/              # Homepage components
-│       └── docs/              # Documentation components
-├── registry/                   # shadcn registry
-│   └── default/
-│       └── crudkit/           # Component definitions
-│           ├── crudkit/       # Core components
-│           ├── crudkit-kanban/    # Kanban plugin
-│           ├── crudkit-example-users/
-│           └── crudkit-example-kanban/
-└── __tests__/                 # Test files
+│   ├── app/                          # Next.js app pages
+│   │   ├── (home)/                  # Homepage
+│   │   ├── docs/                    # Documentation pages
+│   │   └── examples/                # Example applications
+│   ├── components/
+│   │   ├── ui/                      # shadcn/ui base components
+│   │   └── home/                    # Homepage components
+│   └── lib/
+│       └── utils.ts                 # Utility functions (cn, etc.)
+├── registry/                         # shadcn registry
+│   ├── index.json                   # Main registry definition
+│   └── default/crudkit/             # CRUDKit components
+│       ├── crudkit/                 # Core CRUD system
+│       │   ├── components/          # React components
+│       │   ├── hooks/               # React hooks
+│       │   └── lib/                 # Utilities and types
+│       ├── crudkit-kanban/          # Kanban plugin
+│       ├── crudkit-example-users/   # User management example
+│       ├── crudkit-example-kanban/  # Kanban board example
+│       ├── crudkit-example-products/     # Products example
+│       ├── crudkit-example-orders/       # Orders example
+│       ├── crudkit-example-blog/         # Blog/CMS example
+│       ├── crudkit-example-settings/     # Settings example
+│       └── crudkit-example-dashboard/    # Dashboard example
+├── public/r/                        # Built registry JSON files
+└── __tests__/                       # Test files
 ```
 
 ## Contributing
