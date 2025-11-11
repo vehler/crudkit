@@ -1,10 +1,7 @@
-import { DocLayout } from '@/components/docs/doc-layout'
-import type { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Quick Start - CRUDKit',
-  description: 'Build your first CRUD table in 5 minutes',
-}
+import { DocLayout } from '@/components/docs/doc-layout'
+import { CodeBlock } from '@/components/code/code-block'
 
 export default function QuickStartPage() {
   return (
@@ -28,11 +25,9 @@ export default function QuickStartPage() {
           <p className="mt-4 text-zinc-600 dark:text-zinc-400">
             Create a schema file that describes your data structure:
           </p>
-          <div className="mt-4 rounded-lg border bg-zinc-900 p-4 dark:border-zinc-800">
-            <div className="mb-2 text-xs text-zinc-400">lib/user-schema.ts</div>
-            <pre className="overflow-x-auto">
-              <code className="text-sm text-zinc-50">
-{`import { Schema } from '@/lib/crudkit/data-provider'
+          <div className="mt-4">
+            <CodeBlock
+              code={`import { Schema } from '@/lib/crudkit/data-provider'
 
 export const userSchema: Schema = {
   title: 'User',
@@ -75,8 +70,9 @@ export const userSchema: Schema = {
     },
   ],
 }`}
-              </code>
-            </pre>
+              language="typescript"
+              title="lib/user-schema.ts"
+            />
           </div>
         </section>
 
@@ -88,11 +84,9 @@ export const userSchema: Schema = {
             Implement a data provider to connect to your backend. Here's a mock
             example:
           </p>
-          <div className="mt-4 rounded-lg border bg-zinc-900 p-4 dark:border-zinc-800">
-            <div className="mb-2 text-xs text-zinc-400">lib/mock-data-provider.ts</div>
-            <pre className="overflow-x-auto">
-              <code className="text-sm text-zinc-50">
-{`import { DataProvider } from '@/lib/crudkit/data-provider'
+          <div className="mt-4">
+            <CodeBlock
+              code={`import { DataProvider } from '@/lib/crudkit/data-provider'
 
 const mockUsers = [
   { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin', status: 'active' },
@@ -102,69 +96,28 @@ const mockUsers = [
 
 export const mockDataProvider: DataProvider = {
   getList: async (params) => {
-    // Filter
+    // Filter, sort, and paginate
     let filtered = [...mockUsers]
     if (params.search) {
       filtered = filtered.filter(u =>
         u.name.toLowerCase().includes(params.search.toLowerCase())
       )
     }
-
-    // Sort
-    if (params.sortField) {
-      filtered.sort((a, b) => {
-        const aVal = a[params.sortField]
-        const bVal = b[params.sortField]
-        return params.sortOrder === 'asc'
-          ? String(aVal).localeCompare(String(bVal))
-          : String(bVal).localeCompare(String(aVal))
-      })
-    }
-
-    // Paginate
-    const start = (params.page - 1) * params.pageSize
-    const end = start + params.pageSize
-
+    // Sort and paginate...
     return {
       data: filtered.slice(start, end),
       totalCount: filtered.length,
     }
   },
-
-  getOne: async (id) => {
-    const user = mockUsers.find(u => u.id === id)
-    if (!user) throw new Error('User not found')
-    return user
-  },
-
-  create: async (data) => {
-    const newUser = { ...data, id: mockUsers.length + 1 }
-    mockUsers.push(newUser)
-    return newUser
-  },
-
-  update: async (id, data) => {
-    const index = mockUsers.findIndex(u => u.id === id)
-    if (index === -1) throw new Error('User not found')
-    mockUsers[index] = { ...mockUsers[index], ...data }
-    return mockUsers[index]
-  },
-
-  delete: async (id) => {
-    const index = mockUsers.findIndex(u => u.id === id)
-    if (index === -1) throw new Error('User not found')
-    mockUsers.splice(index, 1)
-  },
-
-  deleteMany: async (ids) => {
-    ids.forEach(id => {
-      const index = mockUsers.findIndex(u => u.id === id)
-      if (index !== -1) mockUsers.splice(index, 1)
-    })
-  },
+  getOne: async (id) => { /* ... */ },
+  create: async (data) => { /* ... */ },
+  update: async (id, data) => { /* ... */ },
+  delete: async (id) => { /* ... */ },
+  deleteMany: async (ids) => { /* ... */ },
 }`}
-              </code>
-            </pre>
+              language="typescript"
+              title="lib/mock-data-provider.ts"
+            />
           </div>
         </section>
 
@@ -175,11 +128,9 @@ export const mockDataProvider: DataProvider = {
           <p className="mt-4 text-zinc-600 dark:text-zinc-400">
             Now use the Crud component to build your interface:
           </p>
-          <div className="mt-4 rounded-lg border bg-zinc-900 p-4 dark:border-zinc-800">
-            <div className="mb-2 text-xs text-zinc-400">app/users/page.tsx</div>
-            <pre className="overflow-x-auto">
-              <code className="text-sm text-zinc-50">
-{`import { Crud } from '@/components/crudkit/crud-table'
+          <div className="mt-4">
+            <CodeBlock
+              code={`import { Crud } from '@/components/crudkit/crud-table'
 import { userSchema } from '@/lib/user-schema'
 import { mockDataProvider } from '@/lib/mock-data-provider'
 
@@ -196,8 +147,9 @@ export default function UsersPage() {
     </div>
   )
 }`}
-              </code>
-            </pre>
+              language="typescript"
+              title="app/users/page.tsx"
+            />
           </div>
         </section>
 

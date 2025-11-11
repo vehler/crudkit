@@ -1,10 +1,7 @@
-import { DocLayout } from '@/components/docs/doc-layout'
-import type { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Installation - CRUDKit',
-  description: 'How to install CRUDKit in your Next.js project',
-}
+import { DocLayout } from '@/components/docs/doc-layout'
+import { CodeBlock } from '@/components/code/code-block'
 
 export default function InstallationPage() {
   return (
@@ -36,12 +33,12 @@ export default function InstallationPage() {
             CRUDKit uses the shadcn/ui CLI to install components. If you haven't
             already, initialize shadcn/ui in your project:
           </p>
-          <div className="mt-4 rounded-lg border bg-zinc-900 p-4 dark:border-zinc-800">
-            <pre className="overflow-x-auto">
-              <code className="text-sm text-zinc-50">
-                npx shadcn@latest init
-              </code>
-            </pre>
+          <div className="mt-4">
+            <CodeBlock
+              code="npx shadcn@latest init"
+              language="bash"
+              showLineNumbers={false}
+            />
           </div>
           <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
             Follow the prompts to configure your project. We recommend using the
@@ -56,12 +53,12 @@ export default function InstallationPage() {
           <p className="mt-4 text-zinc-600 dark:text-zinc-400">
             CRUDKit requires a few dependencies. Install them with:
           </p>
-          <div className="mt-4 rounded-lg border bg-zinc-900 p-4 dark:border-zinc-800">
-            <pre className="overflow-x-auto">
-              <code className="text-sm text-zinc-50">
-                npm install nuqs clsx tailwind-merge
-              </code>
-            </pre>
+          <div className="mt-4">
+            <CodeBlock
+              code="npm install nuqs clsx tailwind-merge"
+              language="bash"
+              showLineNumbers={false}
+            />
           </div>
           <div className="mt-4 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
             <p><strong className="text-zinc-900 dark:text-zinc-50">nuqs:</strong> URL state management</p>
@@ -76,12 +73,12 @@ export default function InstallationPage() {
           <p className="mt-4 text-zinc-600 dark:text-zinc-400">
             Install the core CRUDKit components:
           </p>
-          <div className="mt-4 rounded-lg border bg-zinc-900 p-4 dark:border-zinc-800">
-            <pre className="overflow-x-auto">
-              <code className="text-sm text-zinc-50">
-                npx shadcn add https://crudkit.dev/r/crudkit
-              </code>
-            </pre>
+          <div className="mt-4">
+            <CodeBlock
+              code="npx shadcn add https://crudkit.dev/r/crudkit"
+              language="bash"
+              showLineNumbers={false}
+            />
           </div>
           <p className="mt-4 text-zinc-600 dark:text-zinc-400">
             This will add the following files to your project:
@@ -108,12 +105,12 @@ export default function InstallationPage() {
               <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
                 Adds drag-and-drop Kanban board support:
               </p>
-              <div className="mt-2 rounded-lg border bg-zinc-900 p-4 dark:border-zinc-800">
-                <pre className="overflow-x-auto">
-                  <code className="text-sm text-zinc-50">
-                    npx shadcn add https://crudkit.dev/r/crudkit-kanban
-                  </code>
-                </pre>
+              <div className="mt-2">
+                <CodeBlock
+                  code="npx shadcn add https://crudkit.dev/r/crudkit-kanban"
+                  language="bash"
+                  showLineNumbers={false}
+                />
               </div>
             </div>
           </div>

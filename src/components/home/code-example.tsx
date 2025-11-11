@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { CodeBlock } from '@/components/code/code-block'
 
 const examples = [
   {
@@ -54,13 +55,6 @@ export default function UsersPage() {
 
 export function CodeExample() {
   const [activeTab, setActiveTab] = useState(0)
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(examples[activeTab].code)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
 
   return (
     <section className="border-b bg-zinc-50 py-24 dark:bg-zinc-950 sm:py-32">
@@ -92,24 +86,14 @@ export function CodeExample() {
             ))}
           </div>
 
-          {/* Code Block */}
-          <div className="relative mt-4 rounded-lg border bg-zinc-900 dark:border-zinc-800">
-            <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-2">
-              <span className="text-xs font-medium text-zinc-400">
-                {examples[activeTab].language}
-              </span>
-              <button
-                onClick={handleCopy}
-                className="rounded px-2 py-1 text-xs text-zinc-400 hover:bg-zinc-800 hover:text-zinc-50"
-              >
-                {copied ? '✓ Copied!' : 'Copy'}
-              </button>
-            </div>
-            <pre className="overflow-x-auto p-4">
-              <code className="text-sm text-zinc-50">
-                {examples[activeTab].code}
-              </code>
-            </pre>
+          {/* Code Block with Syntax Highlighting */}
+          <div className="mt-4">
+            <CodeBlock
+              code={examples[activeTab].code}
+              language={examples[activeTab].language}
+              title={examples[activeTab].title}
+              showLineNumbers={false}
+            />
           </div>
         </div>
       </div>

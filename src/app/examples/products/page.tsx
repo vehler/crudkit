@@ -1,10 +1,7 @@
-import Link from 'next/link'
-import type { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'E-commerce Products - CRUDKit Examples',
-  description: 'Product catalog management with inventory tracking',
-}
+import Link from 'next/link'
+import { CodeBlock } from '@/components/code/code-block'
 
 export default function ProductsPage() {
   return (
@@ -163,10 +160,9 @@ export default function ProductsPage() {
         </div>
 
         {/* Code Example */}
-        <div className="mt-8 rounded-lg border bg-zinc-900 p-6 dark:border-zinc-800">
-          <div className="mb-3 text-sm font-medium text-zinc-400">Schema Definition</div>
-          <pre className="overflow-x-auto text-sm text-zinc-50">
-{`const productSchema = {
+        <div className="mt-8">
+          <CodeBlock
+            code={`const productSchema = {
   title: 'Product',
   idField: 'id',
   fields: [
@@ -187,7 +183,9 @@ export default function ProductsPage() {
     { name: 'stock', label: 'Stock', type: 'number', required: true },
   ],
 }`}
-          </pre>
+            language="typescript"
+            title="Schema Definition"
+          />
         </div>
       </div>
     </div>
