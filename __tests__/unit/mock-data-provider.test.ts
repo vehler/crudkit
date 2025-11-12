@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { MockDataProvider } from '../../registry/default/crudkit/crudkit-example-users/mock-data-provider'
+import { MockDataProvider } from '@/lib/demo/mock-data-provider'
 
 describe('MockDataProvider', () => {
   let provider: MockDataProvider<any>

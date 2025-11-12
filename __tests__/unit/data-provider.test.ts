@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { BaseDataProvider, type GetListParams } from '../../registry/default/crudkit/crudkit/data-provider'
+import { BaseDataProvider, type GetListParams } from '@/lib/crudkit/data-provider'
 
 // Create a test implementation of BaseDataProvider
 class TestDataProvider extends BaseDataProvider {
