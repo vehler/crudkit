@@ -22,6 +22,7 @@ import {
   DefaultEmptyState,
   DefaultLoadingState,
 } from './table'
+import { Toolbar } from './toolbar'
 import type { CrudListProps } from '../lib/component-types'
 
 // ============================================
@@ -65,46 +66,8 @@ function Crud({ schema, dataProvider, children }: CrudProps) {
 // ============================================
 // TOOLBAR COMPONENT
 // ============================================
-
-const CrudToolbar = React.memo(() => {
-  const { schema, state, actions } = useCrudContext()
-
-  const handleCreate = useCallback(() => {
-    actions.setMode('create')
-  }, [actions])
-
-  const handleRefresh = useCallback(() => {
-    actions.refresh()
-  }, [actions])
-
-  if (state.mode !== 'list') return null
-
-  return (
-    <div
-      className={cn(
-        'crud-toolbar',
-        'mb-4 flex items-center justify-between'
-      )}
-    >
-      <h1 className={cn('text-2xl font-bold')}>{schema.title} Management</h1>
-      <div className={cn('flex gap-2')}>
-        <Button
-          onClick={handleCreate}
-          variant="default"
-        >
-          + Create New
-        </Button>
-        <Button
-          onClick={handleRefresh}
-          variant="outline"
-        >
-          ⟳ Refresh
-        </Button>
-      </div>
-    </div>
-  )
-})
-CrudToolbar.displayName = 'CrudToolbar'
+// Toolbar is now a compound component imported from ./toolbar
+// with sub-components: Toolbar.Title, Toolbar.CreateButton, Toolbar.RefreshButton
 
 // ============================================
 // FILTERS COMPONENT
@@ -678,7 +641,7 @@ CrudView.displayName = 'CrudView'
 // EXPORTS
 // ============================================
 
-Crud.Toolbar = CrudToolbar
+Crud.Toolbar = Toolbar
 Crud.Filters = CrudFilters
 Crud.List = CrudList
 Crud.Form = CrudForm
