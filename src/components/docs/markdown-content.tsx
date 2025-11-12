@@ -4,12 +4,15 @@ import rehypeRaw from 'rehype-raw'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import { CodeBlock } from '@/components/code/code-block'
+import { getSiteUrl } from '@/lib/install-command'
 
 interface MarkdownContentProps {
   content: string
 }
 
 export function MarkdownContent({ content }: MarkdownContentProps) {
+  const siteUrl = getSiteUrl()
+
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -22,7 +25,14 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
         code({ node, inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '')
           const language = match ? match[1] : ''
-          const code = String(children).replace(/\n$/, '')
+          let code = String(children).replace(/\n$/, '')
+
+          // Replace hardcoded URLs with dynamic site URL in install commands
+          if (code.includes('npx shadcn')) {
+            code = code
+              .replace(/https:\/\/crudkit\.dev/g, siteUrl)
+              .replace(/https:\/\/your-domain\.com/g, siteUrl)
+          }
 
           return !inline && language ? (
             <CodeBlock code={code} language={language} />
