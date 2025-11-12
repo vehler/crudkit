@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react'
 import { useCrud, type UseCrudReturn } from '@/hooks/use-crud'
 import type { DataProvider, Schema, Field } from '@/lib/crudkit/data-provider'
 import { cn } from '@/lib/utils'
@@ -57,8 +57,16 @@ function Crud({ schema, dataProvider, children }: CrudProps) {
 // TOOLBAR COMPONENT
 // ============================================
 
-function CrudToolbar() {
+const CrudToolbar = React.memo(() => {
   const { schema, state, actions } = useCrudContext()
+
+  const handleCreate = useCallback(() => {
+    actions.setMode('create')
+  }, [actions])
+
+  const handleRefresh = useCallback(() => {
+    actions.refresh()
+  }, [actions])
 
   if (state.mode !== 'list') return null
 
@@ -72,13 +80,13 @@ function CrudToolbar() {
       <h1 className={cn('text-2xl font-bold')}>{schema.title} Management</h1>
       <div className={cn('flex gap-2')}>
         <Button
-          onClick={() => actions.setMode('create')}
+          onClick={handleCreate}
           variant="default"
         >
           + Create New
         </Button>
         <Button
-          onClick={() => actions.refresh()}
+          onClick={handleRefresh}
           variant="outline"
         >
           ⟳ Refresh
@@ -86,7 +94,7 @@ function CrudToolbar() {
       </div>
     </div>
   )
-}
+})
 
 // ============================================
 // FILTERS COMPONENT
@@ -96,13 +104,19 @@ interface CrudFiltersProps {
   filterFields?: Field[]
 }
 
-function CrudFilters({ filterFields }: CrudFiltersProps) {
+const CrudFilters = React.memo(({ filterFields }: CrudFiltersProps) => {
   const { schema, state, actions } = useCrudContext()
 
+  const fields = useMemo(
+    () => filterFields || schema.fields.filter((f) => f.filterable),
+    [filterFields, schema.fields]
+  )
+
+  const handleClearFilters = useCallback(() => {
+    actions.clearFilters()
+  }, [actions])
+
   if (state.mode !== 'list') return null
-
-  const fields = filterFields || schema.fields.filter((f) => f.filterable)
-
   if (fields.length === 0) return null
 
   return (
@@ -116,15 +130,16 @@ function CrudFilters({ filterFields }: CrudFiltersProps) {
             </Label>
             {field.type === 'select' ? (
               <Select
-                value={state.filters[field.name] || undefined}
+                value={state.filters[field.name] || '__all__'}
                 onValueChange={(value) =>
-                  actions.setFilter(field.name, value || null)
+                  actions.setFilter(field.name, value === '__all__' ? null : value)
                 }
               >
                 <SelectTrigger id={`filter-${field.name}`} className="w-[180px]">
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="__all__">All</SelectItem>
                   {field.options?.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
@@ -147,7 +162,7 @@ function CrudFilters({ filterFields }: CrudFiltersProps) {
         ))}
         <div className={cn('flex items-end')}>
           <Button
-            onClick={() => actions.clearFilters()}
+            onClick={handleClearFilters}
             variant="outline"
             size="sm"
           >
@@ -157,7 +172,7 @@ function CrudFilters({ filterFields }: CrudFiltersProps) {
       </div>
     </div>
   )
-}
+})
 
 // ============================================
 // LIST COMPONENT
@@ -168,12 +183,71 @@ interface CrudListProps {
   showActions?: boolean
 }
 
-function CrudList({ columns, showActions = true }: CrudListProps) {
+const CrudList = React.memo(({ columns, showActions = true }: CrudListProps) => {
   const { schema, state, actions } = useCrudContext()
 
-  if (state.mode !== 'list') return null
+  const displayColumns = useMemo(
+    () => columns || schema.fields.map((f) => f.name),
+    [columns, schema.fields]
+  )
 
-  const displayColumns = columns || schema.fields.map((f) => f.name)
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    actions.setSearch(e.target.value)
+  }, [actions])
+
+  const handleClearSearch = useCallback(() => {
+    actions.setSearch('')
+  }, [actions])
+
+  const handleDeleteMany = useCallback(() => {
+    actions.deleteMany()
+  }, [actions])
+
+  const handleClearSelection = useCallback(() => {
+    actions.selectRows([])
+  }, [actions])
+
+  const handleSelectAll = useCallback((checked: boolean) => {
+    if (checked) {
+      actions.selectRows(state.data.map((item) => item[schema.idField]))
+    } else {
+      actions.selectRows([])
+    }
+  }, [actions, state.data, schema.idField])
+
+  const handleSort = useCallback((col: string) => {
+    actions.setSort(col)
+  }, [actions])
+
+  const handleView = useCallback((id: string | number) => {
+    actions.setMode('view', id)
+  }, [actions])
+
+  const handleEdit = useCallback((id: string | number) => {
+    actions.setMode('edit', id)
+  }, [actions])
+
+  const handleDelete = useCallback((id: string | number) => {
+    actions.delete(id)
+  }, [actions])
+
+  const handleRowSelect = useCallback((id: string | number, checked: boolean) => {
+    if (checked) {
+      actions.selectRows([...state.selectedRows, id])
+    } else {
+      actions.selectRows(state.selectedRows.filter((rowId) => rowId !== id))
+    }
+  }, [actions, state.selectedRows])
+
+  const handlePageChange = useCallback((page: number) => {
+    actions.setPage(page)
+  }, [actions])
+
+  const handlePageSizeChange = useCallback((value: string) => {
+    actions.setPageSize(Number(value))
+  }, [actions])
+
+  if (state.mode !== 'list') return null
 
   return (
     <div className={cn('crud-list')}>
@@ -183,12 +257,12 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
           type="text"
           placeholder="Search..."
           value={state.search}
-          onChange={(e) => actions.setSearch(e.target.value)}
+          onChange={handleSearchChange}
           className="w-80"
         />
         {state.search && (
           <Button
-            onClick={() => actions.setSearch('')}
+            onClick={handleClearSearch}
             variant="outline"
           >
             Clear
@@ -203,14 +277,14 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
             {state.selectedRows.length} items selected
           </span>
           <Button
-            onClick={() => actions.deleteMany()}
+            onClick={handleDeleteMany}
             variant="destructive"
             size="sm"
           >
             Delete Selected
           </Button>
           <Button
-            onClick={() => actions.selectRows([])}
+            onClick={handleClearSelection}
             variant="ghost"
             size="sm"
           >
@@ -236,15 +310,7 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
                   state.selectedRows.length === state.data.length &&
                   state.data.length > 0
                 }
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    actions.selectRows(
-                      state.data.map((item) => item[schema.idField])
-                    )
-                  } else {
-                    actions.selectRows([])
-                  }
-                }}
+                onCheckedChange={handleSelectAll}
               />
             </TableHead>
             {displayColumns.map((col) => {
@@ -256,7 +322,7 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
                     field?.sortable !== false && 'cursor-pointer'
                   )}
                   onClick={() =>
-                    field?.sortable !== false && actions.setSort(col)
+                    field?.sortable !== false && handleSort(col)
                   }
                 >
                   {field?.label || col}
@@ -296,66 +362,52 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
             </TableRow>
           )}
           {!state.loading &&
-            state.data.map((item) => (
-              <TableRow key={item[schema.idField]}>
-                <TableCell>
-                  <Checkbox
-                    checked={state.selectedRows.includes(item[schema.idField])}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        actions.selectRows([
-                          ...state.selectedRows,
-                          item[schema.idField],
-                        ])
-                      } else {
-                        actions.selectRows(
-                          state.selectedRows.filter(
-                            (id) => id !== item[schema.idField]
-                          )
-                        )
-                      }
-                    }}
-                  />
-                </TableCell>
-                {displayColumns.map((col) => (
-                  <TableCell key={col}>
-                    {item[col]}
-                  </TableCell>
-                ))}
-                {showActions && (
+            state.data.map((item) => {
+              const itemId = item[schema.idField]
+              return (
+                <TableRow key={itemId}>
                   <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={() =>
-                          actions.setMode('view', item[schema.idField])
-                        }
-                        variant="ghost"
-                        size="sm"
-                      >
-                        View
-                      </Button>
-                      <Button
-                        onClick={() =>
-                          actions.setMode('edit', item[schema.idField])
-                        }
-                        variant="ghost"
-                        size="sm"
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        onClick={() => actions.delete(item[schema.idField])}
-                        variant="ghost"
-                        size="sm"
-                        className="text-destructive hover:text-destructive"
-                      >
-                        Delete
-                      </Button>
-                    </div>
+                    <Checkbox
+                      checked={state.selectedRows.includes(itemId)}
+                      onCheckedChange={(checked) => handleRowSelect(itemId, !!checked)}
+                    />
                   </TableCell>
-                )}
-              </TableRow>
-            ))}
+                  {displayColumns.map((col) => (
+                    <TableCell key={col}>
+                      {item[col]}
+                    </TableCell>
+                  ))}
+                  {showActions && (
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => handleView(itemId)}
+                          variant="ghost"
+                          size="sm"
+                        >
+                          View
+                        </Button>
+                        <Button
+                          onClick={() => handleEdit(itemId)}
+                          variant="ghost"
+                          size="sm"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          onClick={() => handleDelete(itemId)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-destructive hover:text-destructive"
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </TableCell>
+                  )}
+                </TableRow>
+              )
+            })}
         </TableBody>
       </Table>
 
@@ -373,7 +425,7 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
           </span>
           <Select
             value={String(state.pageSize)}
-            onValueChange={(value) => actions.setPageSize(Number(value))}
+            onValueChange={handlePageSizeChange}
           >
             <SelectTrigger className="w-[140px]">
               <SelectValue />
@@ -388,7 +440,7 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
         </div>
         <div className={cn('flex items-center gap-1')}>
           <Button
-            onClick={() => actions.setPage(1)}
+            onClick={() => handlePageChange(1)}
             disabled={state.page === 1}
             variant="outline"
             size="sm"
@@ -396,7 +448,7 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
             ⏮
           </Button>
           <Button
-            onClick={() => actions.setPage(state.page - 1)}
+            onClick={() => handlePageChange(state.page - 1)}
             disabled={state.page === 1}
             variant="outline"
             size="sm"
@@ -404,7 +456,7 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
             ← Previous
           </Button>
           <Button
-            onClick={() => actions.setPage(state.page + 1)}
+            onClick={() => handlePageChange(state.page + 1)}
             disabled={state.page * state.pageSize >= state.totalCount}
             variant="outline"
             size="sm"
@@ -412,9 +464,7 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
             Next →
           </Button>
           <Button
-            onClick={() =>
-              actions.setPage(Math.ceil(state.totalCount / state.pageSize))
-            }
+            onClick={() => handlePageChange(Math.ceil(state.totalCount / state.pageSize))}
             disabled={state.page * state.pageSize >= state.totalCount}
             variant="outline"
             size="sm"
@@ -425,7 +475,7 @@ function CrudList({ columns, showActions = true }: CrudListProps) {
       </div>
     </div>
   )
-}
+})
 
 // ============================================
 // FORM COMPONENT
@@ -435,9 +485,9 @@ interface CrudFormProps {
   fields?: Field[]
 }
 
-function CrudForm({ fields }: CrudFormProps) {
+const CrudForm = React.memo(({ fields }: CrudFormProps) => {
   const { schema, state, actions } = useCrudContext()
-  const [formData, setFormData] = useState<any>({})
+  const [formData, setFormData] = useState<Record<string, unknown>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
@@ -448,15 +498,15 @@ function CrudForm({ fields }: CrudFormProps) {
     }
   }, [state.mode, state.currentItem])
 
-  if (!['create', 'edit'].includes(state.mode)) return null
+  const displayFields = useMemo(
+    () => fields ||
+      schema.fields.filter((f) =>
+        state.mode === 'create' ? f.showOnCreate !== false : f.showOnEdit !== false
+      ),
+    [fields, schema.fields, state.mode]
+  )
 
-  const displayFields =
-    fields ||
-    schema.fields.filter((f) =>
-      state.mode === 'create' ? f.showOnCreate !== false : f.showOnEdit !== false
-    )
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
 
     // Validation
@@ -479,12 +529,18 @@ function CrudForm({ fields }: CrudFormProps) {
     } catch (err) {
       // Error already handled in useCrud
     }
-  }
+  }, [displayFields, formData, actions])
 
-  const handleChange = (field: string, value: any) => {
-    setFormData((prev: any) => ({ ...prev, [field]: value }))
+  const handleChange = useCallback((field: string, value: unknown) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
     setErrors((prev) => ({ ...prev, [field]: '' }))
-  }
+  }, [])
+
+  const handleCancel = useCallback(() => {
+    actions.setMode('list')
+  }, [actions])
+
+  if (!['create', 'edit'].includes(state.mode)) return null
 
   return (
     <form onSubmit={handleSubmit} className={cn('max-w-2xl space-y-6')}>
@@ -507,7 +563,7 @@ function CrudForm({ fields }: CrudFormProps) {
 
           {field.type === 'select' ? (
             <Select
-              value={formData[field.name] || undefined}
+              value={formData[field.name] ? String(formData[field.name]) : undefined}
               onValueChange={(value) => handleChange(field.name, value)}
             >
               <SelectTrigger id={`form-${field.name}`}>
@@ -554,7 +610,7 @@ function CrudForm({ fields }: CrudFormProps) {
         </Button>
         <Button
           type="button"
-          onClick={() => actions.setMode('list')}
+          onClick={handleCancel}
           variant="outline"
         >
           Cancel
@@ -562,14 +618,22 @@ function CrudForm({ fields }: CrudFormProps) {
       </div>
     </form>
   )
-}
+})
 
 // ============================================
 // VIEW COMPONENT
 // ============================================
 
-function CrudView() {
+const CrudView = React.memo(() => {
   const { schema, state, actions } = useCrudContext()
+
+  const handleEdit = useCallback(() => {
+    actions.setMode('edit', state.selectedId)
+  }, [actions, state.selectedId])
+
+  const handleBackToList = useCallback(() => {
+    actions.setMode('list')
+  }, [actions])
 
   if (state.mode !== 'view' || !state.currentItem) return null
 
@@ -605,12 +669,12 @@ function CrudView() {
 
       <div className="flex gap-2">
         <Button
-          onClick={() => actions.setMode('edit', state.selectedId)}
+          onClick={handleEdit}
         >
           Edit
         </Button>
         <Button
-          onClick={() => actions.setMode('list')}
+          onClick={handleBackToList}
           variant="outline"
         >
           Back to List
@@ -618,7 +682,7 @@ function CrudView() {
       </div>
     </div>
   )
-}
+})
 
 // ============================================
 // EXPORTS

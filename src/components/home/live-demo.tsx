@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 
 interface User {
   id: number
@@ -23,12 +23,22 @@ export function LiveDemo() {
   const [search, setSearch] = useState('')
   const [roleFilter, setRoleFilter] = useState('')
 
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch = user.name.toLowerCase().includes(search.toLowerCase()) ||
-      user.email.toLowerCase().includes(search.toLowerCase())
-    const matchesRole = roleFilter === '' || user.role === roleFilter
-    return matchesSearch && matchesRole
-  })
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) => {
+      const matchesSearch = user.name.toLowerCase().includes(search.toLowerCase()) ||
+        user.email.toLowerCase().includes(search.toLowerCase())
+      const matchesRole = roleFilter === '' || user.role === roleFilter
+      return matchesSearch && matchesRole
+    })
+  }, [users, search, roleFilter])
+
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value)
+  }, [])
+
+  const handleRoleFilterChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRoleFilter(e.target.value)
+  }, [])
 
   return (
     <section className="bg-white py-24 dark:bg-zinc-900 sm:py-32">
@@ -62,14 +72,14 @@ export function LiveDemo() {
                     type="text"
                     placeholder="Search users..."
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={handleSearchChange}
                     className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
                   />
                 </div>
                 <div>
                   <select
                     value={roleFilter}
-                    onChange={(e) => setRoleFilter(e.target.value)}
+                    onChange={handleRoleFilterChange}
                     className="rounded border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
                   >
                     <option value="">All Roles</option>
