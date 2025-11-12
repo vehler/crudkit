@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { SiteLayout } from '@/components/layout/site-layout'
 
 export const metadata: Metadata = {
   title: 'Documentation - CRUDKit',
@@ -8,41 +9,9 @@ export const metadata: Metadata = {
 
 export default function DocsPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-900">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-sm dark:bg-zinc-900/80">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-              CRUDKit
-            </span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link
-              href="/docs"
-              className="text-sm font-medium text-zinc-900 dark:text-zinc-50"
-            >
-              Docs
-            </Link>
-            <Link
-              href="/examples"
-              className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
-            >
-              Examples
-            </Link>
-            <a
-              href="https://github.com/vehler/crudkit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
-            >
-              GitHub
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      <div className="container mx-auto px-4 py-16 sm:px-6 lg:px-8">
+    <SiteLayout>
+      <div className="bg-white dark:bg-zinc-900">
+        <div className="container mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           {/* Header */}
           <div className="mb-16">
@@ -128,17 +97,6 @@ export default function DocsPage() {
               </h2>
               <div className="space-y-3">
                 <Link
-                  href="/docs/introduction"
-                  className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
-                >
-                  <div className="font-medium text-zinc-900 dark:text-zinc-50">
-                    Introduction
-                  </div>
-                  <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                    What is CRUDKit and why use it
-                  </div>
-                </Link>
-                <Link
                   href="/docs/installation"
                   className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
                 >
@@ -165,36 +123,31 @@ export default function DocsPage() {
 
             <section>
               <h2 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                Core Concepts
+                Guides
               </h2>
               <div className="space-y-3">
-                <div className="block rounded-lg border p-4 opacity-60 dark:border-zinc-800">
+                <Link
+                  href="/docs/guides/data-providers"
+                  className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
+                >
                   <div className="font-medium text-zinc-900 dark:text-zinc-50">
-                    Data Provider
+                    Data Providers
                   </div>
                   <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Understanding the data provider interface
-                    <span className="ml-2 text-xs text-zinc-500">Coming Soon</span>
+                    Connect CRUDKit to your backend API, database, or data source
                   </div>
-                </div>
-                <div className="block rounded-lg border p-4 opacity-60 dark:border-zinc-800">
+                </Link>
+                <Link
+                  href="/docs/guides/schemas"
+                  className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
+                >
                   <div className="font-medium text-zinc-900 dark:text-zinc-50">
                     Schema Definition
                   </div>
                   <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Defining your data schema
-                    <span className="ml-2 text-xs text-zinc-500">Coming Soon</span>
+                    Define your data structure to auto-generate forms and tables
                   </div>
-                </div>
-                <div className="block rounded-lg border p-4 opacity-60 dark:border-zinc-800">
-                  <div className="font-medium text-zinc-900 dark:text-zinc-50">
-                    URL State Management
-                  </div>
-                  <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Managing state in the URL with nuqs
-                    <span className="ml-2 text-xs text-zinc-500">Coming Soon</span>
-                  </div>
-                </div>
+                </Link>
               </div>
             </section>
 
@@ -203,33 +156,72 @@ export default function DocsPage() {
                 Components
               </h2>
               <div className="space-y-3">
-                <div className="block rounded-lg border p-4 opacity-60 dark:border-zinc-800">
+                <Link
+                  href="/docs/components/crud"
+                  className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
+                >
                   <div className="font-medium text-zinc-900 dark:text-zinc-50">
                     Crud
                   </div>
                   <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Main wrapper component
-                    <span className="ml-2 text-xs text-zinc-500">Coming Soon</span>
+                    Main wrapper component that provides context and state management
                   </div>
-                </div>
-                <div className="block rounded-lg border p-4 opacity-60 dark:border-zinc-800">
+                </Link>
+                <Link
+                  href="/docs/components/toolbar"
+                  className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
+                >
+                  <div className="font-medium text-zinc-900 dark:text-zinc-50">
+                    Crud.Toolbar
+                  </div>
+                  <div className="text-sm text-zinc-600 dark:text-zinc-400">
+                    Action bar with create and refresh buttons
+                  </div>
+                </Link>
+                <Link
+                  href="/docs/components/filters"
+                  className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
+                >
+                  <div className="font-medium text-zinc-900 dark:text-zinc-50">
+                    Crud.Filters
+                  </div>
+                  <div className="text-sm text-zinc-600 dark:text-zinc-400">
+                    Dynamic filtering interface based on schema
+                  </div>
+                </Link>
+                <Link
+                  href="/docs/components/list"
+                  className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
+                >
                   <div className="font-medium text-zinc-900 dark:text-zinc-50">
                     Crud.List
                   </div>
                   <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Data table component
-                    <span className="ml-2 text-xs text-zinc-500">Coming Soon</span>
+                    Data table with search, sorting, pagination, and actions
                   </div>
-                </div>
-                <div className="block rounded-lg border p-4 opacity-60 dark:border-zinc-800">
+                </Link>
+                <Link
+                  href="/docs/components/form"
+                  className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
+                >
                   <div className="font-medium text-zinc-900 dark:text-zinc-50">
                     Crud.Form
                   </div>
                   <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Create and edit forms
-                    <span className="ml-2 text-xs text-zinc-500">Coming Soon</span>
+                    Dynamic forms for creating and editing records
                   </div>
-                </div>
+                </Link>
+                <Link
+                  href="/docs/components/view"
+                  className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
+                >
+                  <div className="font-medium text-zinc-900 dark:text-zinc-50">
+                    Crud.View
+                  </div>
+                  <div className="text-sm text-zinc-600 dark:text-zinc-400">
+                    Read-only detail view for displaying records
+                  </div>
+                </Link>
               </div>
             </section>
           </div>
@@ -249,18 +241,20 @@ export default function DocsPage() {
               >
                 View Examples
               </Link>
-              <a
+              {/* GitHub link temporarily hidden - private repo */}
+              {/* <a
                 href="https://github.com/vehler/crudkit/issues"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex h-10 items-center justify-center rounded-lg bg-zinc-900 px-6 text-sm font-semibold text-white transition-all hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
               >
                 GitHub Issues
-              </a>
+              </a> */}
             </div>
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </SiteLayout>
   )
 }

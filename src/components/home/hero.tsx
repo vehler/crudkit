@@ -1,8 +1,11 @@
 'use client'
 
 import Link from 'next/link'
+import { getSiteUrl } from '@/lib/install-command'
 
 export function Hero() {
+  const siteUrl = getSiteUrl()
+  const installCommand = `npx shadcn add ${siteUrl}/r/crudkit`
   return (
     <section className="relative overflow-hidden border-b bg-gradient-to-b from-zinc-50 via-white to-white dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-900">
       <div className="container mx-auto px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
@@ -62,13 +65,11 @@ export function Hero() {
             <div className="inline-flex items-start rounded-lg border bg-zinc-50 p-4 font-mono text-sm dark:border-zinc-800 dark:bg-zinc-900">
               <span className="select-none text-zinc-500">$ </span>
               <span className="ml-2 text-zinc-900 dark:text-zinc-50">
-                npx shadcn add https://crudkit.dev/r/crudkit
+                {installCommand}
               </span>
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText(
-                    'npx shadcn add https://crudkit.dev/r/crudkit'
-                  )
+                  navigator.clipboard.writeText(installCommand)
                 }}
                 className="ml-4 rounded p-1 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
                 aria-label="Copy to clipboard"

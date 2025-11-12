@@ -2,17 +2,22 @@
 
 import { useState } from 'react'
 import { CodeBlock } from '@/components/code/code-block'
+import { getSiteUrl } from '@/lib/install-command'
 
-const examples = [
-  {
-    title: 'Installation',
-    language: 'bash',
-    code: `npx shadcn add https://crudkit.dev/r/crudkit`,
-  },
-  {
-    title: 'Basic Usage',
-    language: 'tsx',
-    code: `import { Crud } from '@/components/crudkit/crud-table'
+export function CodeExample() {
+  const [activeTab, setActiveTab] = useState(0)
+  const siteUrl = getSiteUrl()
+
+  const examples = [
+    {
+      title: 'Installation',
+      language: 'bash',
+      code: `npx shadcn add ${siteUrl}/r/crudkit`,
+    },
+    {
+      title: 'Basic Usage',
+      language: 'tsx',
+      code: `import { Crud } from '@/components/crudkit/crud-table'
 import { userSchema } from '@/lib/user-schema'
 import { dataProvider } from '@/lib/data-provider'
 
@@ -27,11 +32,11 @@ export default function UsersPage() {
     </Crud>
   )
 }`,
-  },
-  {
-    title: 'Define Schema',
-    language: 'tsx',
-    code: `export const userSchema = {
+    },
+    {
+      title: 'Define Schema',
+      language: 'tsx',
+      code: `export const userSchema = {
   title: 'User',
   idField: 'id',
   fields: [
@@ -50,11 +55,8 @@ export default function UsersPage() {
     { name: 'status', label: 'Status', type: 'select', filterable: true },
   ],
 }`,
-  },
-]
-
-export function CodeExample() {
-  const [activeTab, setActiveTab] = useState(0)
+    },
+  ]
 
   return (
     <section className="border-b bg-zinc-50 py-24 dark:bg-zinc-950 sm:py-32">

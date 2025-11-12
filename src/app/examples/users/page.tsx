@@ -2,8 +2,10 @@
 
 import Link from 'next/link'
 import { CodeBlock } from '@/components/code/code-block'
+import { getSiteUrl } from '@/lib/install-command'
 
 export default function UsersPage() {
+  const siteUrl = getSiteUrl()
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       {/* Navigation */}
@@ -63,7 +65,7 @@ export default function UsersPage() {
           </p>
           <div className="mt-4">
             <CodeBlock
-              code={`npx shadcn add https://crudkit.dev/r/crudkit-example-users`}
+              code={`npx shadcn add ${siteUrl}/r/crudkit-example-users`}
               language="bash"
               title="CLI"
             />
