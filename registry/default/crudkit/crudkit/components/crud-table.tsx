@@ -14,6 +14,15 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  DefaultRow,
+  DefaultCell,
+  DefaultActions,
+  DefaultHeader,
+  DefaultEmptyState,
+  DefaultLoadingState,
+} from './table'
+import type { CrudListProps } from '../lib/component-types'
 
 // ============================================
 // CONTEXT
@@ -25,7 +34,7 @@ interface CrudContextValue extends UseCrudReturn {
 
 const CrudContext = createContext<CrudContextValue | null>(null)
 
-function useCrudContext() {
+function useCrudContext<T = any>(): CrudContextValue {
   const context = useContext(CrudContext)
   if (!context) {
     throw new Error('Crud compound components must be used within <Crud>')
@@ -95,6 +104,7 @@ const CrudToolbar = React.memo(() => {
     </div>
   )
 })
+CrudToolbar.displayName = 'CrudToolbar'
 
 // ============================================
 // FILTERS COMPONENT
@@ -173,22 +183,31 @@ const CrudFilters = React.memo(({ filterFields }: CrudFiltersProps) => {
     </div>
   )
 })
+CrudFilters.displayName = 'CrudFilters'
 
 // ============================================
 // LIST COMPONENT
 // ============================================
 
-interface CrudListProps {
-  columns?: string[]
-  showActions?: boolean
-}
+const CrudList = React.memo(<T,>({ columns, showActions = true, className, components = {} }: CrudListProps<T>) => {
+  const { schema, state, actions } = useCrudContext<T>()
 
-const CrudList = React.memo(({ columns, showActions = true }: CrudListProps) => {
-  const { schema, state, actions } = useCrudContext()
+  // Use custom components or defaults
+  const Row = components.Row ?? DefaultRow
+  const Cell = components.Cell ?? DefaultCell
+  const Actions = components.Actions ?? DefaultActions
+  const Header = components.Header ?? DefaultHeader
+  const EmptyState = components.EmptyState ?? DefaultEmptyState
+  const LoadingState = components.LoadingState ?? DefaultLoadingState
 
   const displayColumns = useMemo(
     () => columns || schema.fields.map((f) => f.name),
     [columns, schema.fields]
+  )
+
+  const visibleFields = useMemo(
+    () => schema.fields.filter((f) => displayColumns.includes(f.name)),
+    [schema.fields, displayColumns]
   )
 
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,7 +228,7 @@ const CrudList = React.memo(({ columns, showActions = true }: CrudListProps) => 
 
   const handleSelectAll = useCallback((checked: boolean) => {
     if (checked) {
-      actions.selectRows(state.data.map((item) => item[schema.idField]))
+      actions.selectRows(state.data.map((item: any) => item[schema.idField]))
     } else {
       actions.selectRows([])
     }
@@ -220,22 +239,22 @@ const CrudList = React.memo(({ columns, showActions = true }: CrudListProps) => 
   }, [actions])
 
   const handleView = useCallback((id: string | number) => {
-    actions.setMode('view', id)
+    actions.setMode('view', String(id))
   }, [actions])
 
   const handleEdit = useCallback((id: string | number) => {
-    actions.setMode('edit', id)
+    actions.setMode('edit', String(id))
   }, [actions])
 
   const handleDelete = useCallback((id: string | number) => {
-    actions.delete(id)
+    actions.delete(String(id))
   }, [actions])
 
   const handleRowSelect = useCallback((id: string | number, checked: boolean) => {
     if (checked) {
-      actions.selectRows([...state.selectedRows, id])
+      actions.selectRows([...state.selectedRows, String(id)])
     } else {
-      actions.selectRows(state.selectedRows.filter((rowId) => rowId !== id))
+      actions.selectRows(state.selectedRows.filter((rowId) => rowId !== String(id)))
     }
   }, [actions, state.selectedRows])
 
@@ -250,7 +269,7 @@ const CrudList = React.memo(({ columns, showActions = true }: CrudListProps) => 
   if (state.mode !== 'list') return null
 
   return (
-    <div className={cn('crud-list')}>
+    <div className={cn('crud-list', className)}>
       {/* Search Bar */}
       <div className={cn('mb-4 flex gap-2')}>
         <Input
@@ -313,99 +332,67 @@ const CrudList = React.memo(({ columns, showActions = true }: CrudListProps) => 
                 onCheckedChange={handleSelectAll}
               />
             </TableHead>
-            {displayColumns.map((col) => {
-              const field = schema.fields.find((f) => f.name === col)
-              return (
-                <TableHead
-                  key={col}
-                  className={cn(
-                    field?.sortable !== false && 'cursor-pointer'
-                  )}
-                  onClick={() =>
-                    field?.sortable !== false && handleSort(col)
-                  }
-                >
-                  {field?.label || col}
-                  {state.sortField === col && (
-                    <span className={cn('ml-1')}>
-                      {state.sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
-                  )}
-                </TableHead>
-              )
-            })}
+            {visibleFields.map((field) => (
+              <Header
+                key={field.name}
+                field={field}
+                sortable={field.sortable !== false}
+                currentSort={
+                  state.sortField === field.name
+                    ? { field: state.sortField, order: state.sortOrder as 'asc' | 'desc' }
+                    : null
+                }
+                onSort={handleSort}
+                schema={schema}
+                actions={actions}
+                state={state}
+              />
+            ))}
             {showActions && <TableHead>Actions</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
           {state.loading && (
-            <TableRow>
-              <TableCell
-                colSpan={displayColumns.length + 2}
-                className="h-24 text-center"
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <Skeleton className="h-4 w-[200px]" />
-                  <Skeleton className="h-4 w-[150px]" />
-                </div>
-              </TableCell>
-            </TableRow>
+            <LoadingState
+              rowCount={state.pageSize}
+              schema={schema}
+              actions={actions}
+              state={state}
+            />
           )}
           {!state.loading && state.data.length === 0 && (
-            <TableRow>
-              <TableCell
-                colSpan={displayColumns.length + 2}
-                className="h-24 text-center text-muted-foreground"
-              >
-                No data found
-              </TableCell>
-            </TableRow>
+            <EmptyState
+              hasFilters={Object.keys(state.filters).length > 0 || state.search !== ''}
+              onClearFilters={() => {
+                actions.clearFilters()
+                actions.setSearch('')
+              }}
+              schema={schema}
+              actions={actions}
+              state={state}
+            />
           )}
           {!state.loading &&
-            state.data.map((item) => {
+            state.data.map((item: any, index: number) => {
               const itemId = item[schema.idField]
               return (
-                <TableRow key={itemId}>
-                  <TableCell>
-                    <Checkbox
-                      checked={state.selectedRows.includes(itemId)}
-                      onCheckedChange={(checked) => handleRowSelect(itemId, !!checked)}
-                    />
-                  </TableCell>
-                  {displayColumns.map((col) => (
-                    <TableCell key={col}>
-                      {item[col]}
-                    </TableCell>
-                  ))}
-                  {showActions && (
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={() => handleView(itemId)}
-                          variant="ghost"
-                          size="sm"
-                        >
-                          View
-                        </Button>
-                        <Button
-                          onClick={() => handleEdit(itemId)}
-                          variant="ghost"
-                          size="sm"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          onClick={() => handleDelete(itemId)}
-                          variant="ghost"
-                          size="sm"
-                          className="text-destructive hover:text-destructive"
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </TableCell>
-                  )}
-                </TableRow>
+                <Row
+                  key={itemId}
+                  row={item}
+                  index={index}
+                  selected={state.selectedRows.includes(String(itemId))}
+                  onSelect={(checked) => handleRowSelect(itemId, checked)}
+                  onView={() => handleView(itemId)}
+                  onEdit={() => handleEdit(itemId)}
+                  onDelete={() => handleDelete(itemId)}
+                  schema={schema}
+                  actions={actions}
+                  state={state}
+                  visibleColumns={displayColumns}
+                  showActions={showActions}
+                  CellComponent={Cell}
+                  ActionsComponent={Actions}
+                />
               )
             })}
         </TableBody>
@@ -475,7 +462,8 @@ const CrudList = React.memo(({ columns, showActions = true }: CrudListProps) => 
       </div>
     </div>
   )
-})
+}) as <T = any>(props: CrudListProps<T>) => React.ReactElement | null
+CrudList.displayName = 'CrudList'
 
 // ============================================
 // FORM COMPONENT
@@ -580,7 +568,7 @@ const CrudForm = React.memo(({ fields }: CrudFormProps) => {
           ) : field.type === 'textarea' ? (
             <Textarea
               id={`form-${field.name}`}
-              value={formData[field.name] || ''}
+              value={String(formData[field.name] || '')}
               onChange={(e) => handleChange(field.name, e.target.value)}
               rows={4}
             />
@@ -588,7 +576,7 @@ const CrudForm = React.memo(({ fields }: CrudFormProps) => {
             <Input
               id={`form-${field.name}`}
               type={field.type || 'text'}
-              value={formData[field.name] || ''}
+              value={String(formData[field.name] || '')}
               onChange={(e) => handleChange(field.name, e.target.value)}
             />
           )}
@@ -619,6 +607,7 @@ const CrudForm = React.memo(({ fields }: CrudFormProps) => {
     </form>
   )
 })
+CrudForm.displayName = 'CrudForm'
 
 // ============================================
 // VIEW COMPONENT
@@ -683,6 +672,7 @@ const CrudView = React.memo(() => {
     </div>
   )
 })
+CrudView.displayName = 'CrudView'
 
 // ============================================
 // EXPORTS
