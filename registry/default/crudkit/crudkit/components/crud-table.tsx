@@ -23,7 +23,8 @@ import {
   DefaultLoadingState,
 } from './table'
 import { Toolbar } from './toolbar'
-import type { CrudListProps } from '../lib/component-types'
+import { DefaultField, DefaultFormLayout, DefaultSubmitButton } from './form'
+import type { CrudListProps, CrudFormProps as CrudFormPropsType } from '../lib/component-types'
 
 // ============================================
 // CONTEXT
@@ -432,14 +433,15 @@ CrudList.displayName = 'CrudList'
 // FORM COMPONENT
 // ============================================
 
-interface CrudFormProps {
-  fields?: Field[]
-}
-
-const CrudForm = React.memo(({ fields }: CrudFormProps) => {
+const CrudForm = React.memo(({ fields, className, components = {} }: CrudFormPropsType) => {
   const { schema, state, actions } = useCrudContext()
   const [formData, setFormData] = useState<Record<string, unknown>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Use custom components or defaults
+  const Field = components.Field ?? DefaultField
+  const Layout = components.Layout ?? DefaultFormLayout
+  const SubmitButton = components.SubmitButton ?? DefaultSubmitButton
 
   useEffect(() => {
     if (state.mode === 'edit' && state.currentItem) {
@@ -494,80 +496,39 @@ const CrudForm = React.memo(({ fields }: CrudFormProps) => {
   if (!['create', 'edit'].includes(state.mode)) return null
 
   return (
-    <form onSubmit={handleSubmit} className={cn('max-w-2xl space-y-6')}>
-      <h2 className={cn('text-xl font-bold')}>
-        {state.mode === 'create' ? 'Create' : 'Edit'} {schema.title}
-      </h2>
+    <Layout
+      title={`${state.mode === 'create' ? 'Create' : 'Edit'} ${schema.title}`}
+      error={state.error}
+      onSubmit={handleSubmit}
+      onCancel={handleCancel}
+      isSubmitting={state.loading}
+      mode={state.mode as 'create' | 'edit'}
+      schema={schema}
+      actions={actions}
+      state={state}
+      className={className}
+    >
+      {displayFields.map((field) => {
+        // Use field-specific renderer if provided
+        const FieldComponent = components.fields?.[field.name] ?? Field
 
-      {state.error && (
-        <Alert variant="destructive">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      )}
-
-      {displayFields.map((field) => (
-        <div key={field.name} className="space-y-2">
-          <Label htmlFor={`form-${field.name}`}>
-            {field.label}
-            {field.required && <span className="text-destructive"> *</span>}
-          </Label>
-
-          {field.type === 'select' ? (
-            <Select
-              value={formData[field.name] ? String(formData[field.name]) : undefined}
-              onValueChange={(value) => handleChange(field.name, value)}
-            >
-              <SelectTrigger id={`form-${field.name}`}>
-                <SelectValue placeholder={`Select ${field.label}`} />
-              </SelectTrigger>
-              <SelectContent>
-                {field.options?.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          ) : field.type === 'textarea' ? (
-            <Textarea
-              id={`form-${field.name}`}
-              value={String(formData[field.name] || '')}
-              onChange={(e) => handleChange(field.name, e.target.value)}
-              rows={4}
-            />
-          ) : (
-            <Input
-              id={`form-${field.name}`}
-              type={field.type || 'text'}
-              value={String(formData[field.name] || '')}
-              onChange={(e) => handleChange(field.name, e.target.value)}
-            />
-          )}
-
-          {errors[field.name] && (
-            <p className="text-sm text-destructive">
-              {errors[field.name]}
-            </p>
-          )}
-        </div>
-      ))}
-
-      <div className="flex gap-2">
-        <Button
-          type="submit"
-          disabled={state.loading}
-        >
-          {state.loading ? 'Saving...' : 'Save'}
-        </Button>
-        <Button
-          type="button"
-          onClick={handleCancel}
-          variant="outline"
-        >
-          Cancel
-        </Button>
-      </div>
-    </form>
+        return (
+          <FieldComponent
+            key={field.name}
+            field={field}
+            value={formData[field.name]}
+            error={errors[field.name]}
+            onChange={(value) => handleChange(field.name, value)}
+            onBlur={() => {/* optional field blur handler */}}
+            disabled={state.loading}
+            mode={state.mode as 'create' | 'edit'}
+            schema={schema}
+            actions={actions}
+            state={state}
+          />
+        )
+      })}
+    </Layout>
   )
 })
 CrudForm.displayName = 'CrudForm'
