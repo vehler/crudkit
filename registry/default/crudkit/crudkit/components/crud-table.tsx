@@ -130,16 +130,16 @@ const CrudFilters = React.memo(({ filterFields }: CrudFiltersProps) => {
             </Label>
             {field.type === 'select' ? (
               <Select
-                value={state.filters[field.name] || ''}
+                value={state.filters[field.name] || '__all__'}
                 onValueChange={(value) =>
-                  actions.setFilter(field.name, value || null)
+                  actions.setFilter(field.name, value === '__all__' ? null : value)
                 }
               >
                 <SelectTrigger id={`filter-${field.name}`} className="w-[180px]">
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="__all__">All</SelectItem>
                   {field.options?.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
@@ -563,7 +563,7 @@ const CrudForm = React.memo(({ fields }: CrudFormProps) => {
 
           {field.type === 'select' ? (
             <Select
-              value={formData[field.name] || ''}
+              value={formData[field.name] ? String(formData[field.name]) : undefined}
               onValueChange={(value) => handleChange(field.name, value)}
             >
               <SelectTrigger id={`form-${field.name}`}>
