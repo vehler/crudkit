@@ -212,16 +212,7 @@ export default function UsersPage() {
             >
               examples page
             </a>{' '}
-            for more use cases, or{' '}
-            <a
-              href="https://github.com/vehler/crudkit/issues"
-              className="font-medium underline hover:no-underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              open an issue
-            </a>{' '}
-            on GitHub.
+            for more use cases.
           </p>
         </section>
       </div>
