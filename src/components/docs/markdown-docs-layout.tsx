@@ -40,7 +40,7 @@ export function MarkdownDocsLayout({
               </div>
 
               {/* Markdown Content */}
-              <div className="prose prose-zinc dark:prose-invert max-w-none">
+              <div className="prose max-w-none">
                 <MarkdownContent content={markdown} />
               </div>
             </div>

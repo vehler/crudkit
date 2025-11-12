@@ -2,6 +2,7 @@
 
 import { DocLayout } from '@/components/docs/doc-layout'
 import { CodeBlock } from '@/components/code/code-block'
+import { InstallCommand } from '@/components/docs/install-command'
 
 export default function InstallationPage() {
   return (
@@ -48,38 +49,12 @@ export default function InstallationPage() {
 
         <section>
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Step 2: Install Required Dependencies
+            Step 2: Add CRUDKit Components
           </h2>
           <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-            CRUDKit requires a few dependencies. Install them with:
+            Install the core CRUDKit components. This will also install all required dependencies (nuqs, clsx, tailwind-merge):
           </p>
-          <div className="mt-4">
-            <CodeBlock
-              code="npm install nuqs clsx tailwind-merge"
-              language="bash"
-              showLineNumbers={false}
-            />
-          </div>
-          <div className="mt-4 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
-            <p><strong className="text-zinc-900 dark:text-zinc-50">nuqs:</strong> URL state management</p>
-            <p><strong className="text-zinc-900 dark:text-zinc-50">clsx & tailwind-merge:</strong> Utility functions for className handling</p>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Step 3: Add CRUDKit Components
-          </h2>
-          <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-            Install the core CRUDKit components:
-          </p>
-          <div className="mt-4">
-            <CodeBlock
-              code="npx shadcn add https://crudkit.dev/r/crudkit"
-              language="bash"
-              showLineNumbers={false}
-            />
-          </div>
+          <InstallCommand component="crudkit" className="mt-4" />
           <p className="mt-4 text-zinc-600 dark:text-zinc-400">
             This will add the following files to your project:
           </p>
@@ -92,7 +67,7 @@ export default function InstallationPage() {
 
         <section>
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Step 4: Optional Plugins
+            Step 3: Optional Plugins
           </h2>
           <p className="mt-4 text-zinc-600 dark:text-zinc-400">
             Install optional plugins as needed:
@@ -105,13 +80,7 @@ export default function InstallationPage() {
               <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
                 Adds drag-and-drop Kanban board support:
               </p>
-              <div className="mt-2">
-                <CodeBlock
-                  code="npx shadcn add https://crudkit.dev/r/crudkit-kanban"
-                  language="bash"
-                  showLineNumbers={false}
-                />
-              </div>
+              <InstallCommand component="crudkit-kanban" className="mt-2" />
             </div>
           </div>
         </section>
