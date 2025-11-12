@@ -24,7 +24,8 @@ import {
 } from './table'
 import { Toolbar } from './toolbar'
 import { DefaultField, DefaultFormLayout, DefaultSubmitButton } from './form'
-import type { CrudListProps, CrudFormProps as CrudFormPropsType } from '../lib/component-types'
+import { DefaultViewField, DefaultViewLayout } from './view'
+import type { CrudListProps, CrudFormProps as CrudFormPropsType, CrudViewProps } from '../lib/component-types'
 
 // ============================================
 // CONTEXT
@@ -537,8 +538,12 @@ CrudForm.displayName = 'CrudForm'
 // VIEW COMPONENT
 // ============================================
 
-const CrudView = React.memo(() => {
+const CrudView = React.memo(({ className, components = {} }: CrudViewProps) => {
   const { schema, state, actions } = useCrudContext()
+
+  // Use custom components or defaults
+  const Field = components.Field ?? DefaultViewField
+  const Layout = components.Layout ?? DefaultViewLayout
 
   const handleEdit = useCallback(() => {
     actions.setMode('edit', state.selectedId)
@@ -551,49 +556,32 @@ const CrudView = React.memo(() => {
   if (state.mode !== 'view' || !state.currentItem) return null
 
   return (
-    <div className={cn('max-w-2xl space-y-6')}>
-      <h2 className={cn('text-xl font-bold')}>
-        View {schema.title}
-      </h2>
+    <Layout
+      item={state.currentItem}
+      onEdit={handleEdit}
+      onBack={handleBackToList}
+      schema={schema}
+      actions={actions}
+      state={state}
+      className={className}
+    >
+      {schema.fields.map((field) => {
+        // Use field-specific renderer if provided
+        const FieldComponent = components.fields?.[field.name] ?? Field
 
-      {state.loading && (
-        <div className="space-y-3">
-          {schema.fields.map((field) => (
-            <div key={field.name} className="space-y-2">
-              <Skeleton className="h-4 w-[100px]" />
-              <Skeleton className="h-4 w-[250px]" />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {!state.loading && state.currentItem && (
-        <div className="space-y-3">
-          {schema.fields.map((field) => (
-            <div key={field.name}>
-              <strong className="font-medium">{field.label}:</strong>{' '}
-              <span className="text-muted-foreground">
-                {state.currentItem[field.name] || '-'}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className="flex gap-2">
-        <Button
-          onClick={handleEdit}
-        >
-          Edit
-        </Button>
-        <Button
-          onClick={handleBackToList}
-          variant="outline"
-        >
-          Back to List
-        </Button>
-      </div>
-    </div>
+        return (
+          <FieldComponent
+            key={field.name}
+            field={field}
+            value={state.currentItem[field.name]}
+            item={state.currentItem}
+            schema={schema}
+            actions={actions}
+            state={state}
+          />
+        )
+      })}
+    </Layout>
   )
 })
 CrudView.displayName = 'CrudView'
