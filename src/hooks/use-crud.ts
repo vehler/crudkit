@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useQueryStates, parseAsString, parseAsInteger, parseAsJson } from 'nuqs'
 import type { DataProvider, GetListParams, Schema } from '@/lib/crudkit/data-provider'
 
@@ -35,7 +35,7 @@ interface CrudActions {
   setSearch: (query: string) => void
   selectRows: (ids: string[]) => void
   refresh: () => Promise<void>
-  save: (formData: any) => Promise<void>
+  save: (formData: Record<string, unknown>) => Promise<void>
   delete: (id: string) => Promise<void>
   deleteMany: () => Promise<void>
 }
@@ -196,136 +196,162 @@ export function useCrud<T = any>(
   // ACTIONS
   // ============================================
 
-  const actions: CrudActions = {
-    setMode: (newMode: Mode, id: string | null = null) => {
-      setUrlState({ mode: newMode, id })
-    },
+  const setMode = useCallback((newMode: Mode, id: string | null = null) => {
+    setUrlState({ mode: newMode, id })
+  }, [setUrlState])
 
-    setSort: (field: string) => {
-      if (urlState.sortField === field) {
-        // Toggle order if same field
-        setUrlState({
-          sortOrder: urlState.sortOrder === 'asc' ? 'desc' : 'asc',
-        })
-      } else {
-        // Set new field with asc order
-        setUrlState({
-          sortField: field,
-          sortOrder: 'asc',
-        })
-      }
-    },
-
-    setPage: (newPage: number) => {
-      setUrlState({ page: newPage })
-    },
-
-    setPageSize: (newSize: number) => {
-      setUrlState({ pageSize: newSize, page: 1 }) // Reset to first page
-    },
-
-    setFilter: (key: string, value: string | null) => {
-      setUrlState((prev) => {
-        const newFilters = { ...prev.filters }
-        if (value) {
-          newFilters[key] = value
-        } else {
-          delete newFilters[key]
-        }
-        return {
-          filters: newFilters,
-          page: 1, // Reset to first page
-        }
+  const setSort = useCallback((field: string) => {
+    if (urlState.sortField === field) {
+      // Toggle order if same field
+      setUrlState({
+        sortOrder: urlState.sortOrder === 'asc' ? 'desc' : 'asc',
       })
-    },
+    } else {
+      // Set new field with asc order
+      setUrlState({
+        sortField: field,
+        sortOrder: 'asc',
+      })
+    }
+  }, [urlState.sortField, urlState.sortOrder, setUrlState])
 
-    clearFilters: () => {
-      setUrlState({ filters: {}, page: 1 })
-    },
+  const setPage = useCallback((newPage: number) => {
+    setUrlState({ page: newPage })
+  }, [setUrlState])
 
-    setSearch: (query: string) => {
-      setUrlState({ search: query, page: 1 })
-    },
+  const setPageSize = useCallback((newSize: number) => {
+    setUrlState({ pageSize: newSize, page: 1 }) // Reset to first page
+  }, [setUrlState])
 
-    selectRows: (ids: string[]) => {
-      setSelectedRows(ids)
-    },
+  const setFilter = useCallback((key: string, value: string | null) => {
+    setUrlState((prev) => {
+      const newFilters = { ...prev.filters }
+      if (value) {
+        newFilters[key] = value
+      } else {
+        delete newFilters[key]
+      }
+      return {
+        filters: newFilters,
+        page: 1, // Reset to first page
+      }
+    })
+  }, [setUrlState])
 
-    refresh: async () => {
+  const clearFilters = useCallback(() => {
+    setUrlState({ filters: {}, page: 1 })
+  }, [setUrlState])
+
+  const setSearchAction = useCallback((query: string) => {
+    setUrlState({ search: query, page: 1 })
+  }, [setUrlState])
+
+  const selectRows = useCallback((ids: string[]) => {
+    setSelectedRows(ids)
+  }, [])
+
+  const refresh = useCallback(async () => {
+    await fetchList()
+  }, [fetchList])
+
+  const save = useCallback(async (formData: Record<string, unknown>) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      if (urlState.mode === 'create') {
+        await dataProvider.create(formData)
+      } else if (urlState.mode === 'edit' && urlState.id) {
+        await dataProvider.update(urlState.id, formData)
+      }
+
+      // Return to list and refresh
+      setUrlState({ mode: 'list', id: null })
       await fetchList()
-    },
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save')
+      throw err // Re-throw to let form handle it
+    } finally {
+      setLoading(false)
+    }
+  }, [urlState.mode, urlState.id, dataProvider, setUrlState, fetchList])
 
-    save: async (formData: any) => {
-      setLoading(true)
-      setError(null)
+  const deleteAction = useCallback(async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this item?')) {
+      return
+    }
 
-      try {
-        if (urlState.mode === 'create') {
-          await dataProvider.create(formData)
-        } else if (urlState.mode === 'edit' && urlState.id) {
-          await dataProvider.update(urlState.id, formData)
-        }
+    setLoading(true)
+    setError(null)
 
-        // Return to list and refresh
-        setUrlState({ mode: 'list', id: null })
-        await fetchList()
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to save')
-        throw err // Re-throw to let form handle it
-      } finally {
-        setLoading(false)
-      }
-    },
+    try {
+      await dataProvider.delete(id)
+      await fetchList()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete')
+    } finally {
+      setLoading(false)
+    }
+  }, [dataProvider, fetchList])
 
-    delete: async (id: string) => {
-      if (!window.confirm('Are you sure you want to delete this item?')) {
-        return
-      }
+  const deleteMany = useCallback(async () => {
+    if (selectedRows.length === 0) return
 
-      setLoading(true)
-      setError(null)
+    if (
+      !window.confirm(
+        `Are you sure you want to delete ${selectedRows.length} item(s)?`
+      )
+    ) {
+      return
+    }
 
-      try {
-        await dataProvider.delete(id)
-        await fetchList()
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to delete')
-      } finally {
-        setLoading(false)
-      }
-    },
+    setLoading(true)
+    setError(null)
 
-    deleteMany: async () => {
-      if (selectedRows.length === 0) return
+    try {
+      await dataProvider.deleteMany(selectedRows)
+      setSelectedRows([])
+      await fetchList()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete items')
+    } finally {
+      setLoading(false)
+    }
+  }, [selectedRows, dataProvider, fetchList])
 
-      if (
-        !window.confirm(
-          `Are you sure you want to delete ${selectedRows.length} item(s)?`
-        )
-      ) {
-        return
-      }
-
-      setLoading(true)
-      setError(null)
-
-      try {
-        await dataProvider.deleteMany(selectedRows)
-        setSelectedRows([])
-        await fetchList()
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to delete items')
-      } finally {
-        setLoading(false)
-      }
-    },
-  }
+  const actions = useMemo<CrudActions>(() => ({
+    setMode,
+    setSort,
+    setPage,
+    setPageSize,
+    setFilter,
+    clearFilters,
+    setSearch: setSearchAction,
+    selectRows,
+    refresh,
+    save,
+    delete: deleteAction,
+    deleteMany,
+  }), [
+    setMode,
+    setSort,
+    setPage,
+    setPageSize,
+    setFilter,
+    clearFilters,
+    setSearchAction,
+    selectRows,
+    refresh,
+    save,
+    deleteAction,
+    deleteMany,
+  ])
 
   // ============================================
   // RETURN
   // ============================================
 
-  const state: CrudState<T> = {
+  const state = useMemo<CrudState<T>>(() => ({
     mode: urlState.mode as Mode,
     selectedId: urlState.id,
     page: urlState.page,
@@ -340,7 +366,22 @@ export function useCrud<T = any>(
     error,
     selectedRows,
     currentItem,
-  }
+  }), [
+    urlState.mode,
+    urlState.id,
+    urlState.page,
+    urlState.pageSize,
+    urlState.sortField,
+    urlState.sortOrder,
+    urlState.filters,
+    urlState.search,
+    data,
+    totalCount,
+    loading,
+    error,
+    selectedRows,
+    currentItem,
+  ])
 
-  return { state, actions }
+  return useMemo(() => ({ state, actions }), [state, actions])
 }
