@@ -97,17 +97,6 @@ export default function DocsPage() {
               </h2>
               <div className="space-y-3">
                 <Link
-                  href="/docs/introduction"
-                  className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
-                >
-                  <div className="font-medium text-zinc-900 dark:text-zinc-50">
-                    Introduction
-                  </div>
-                  <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                    What is CRUDKit and why use it
-                  </div>
-                </Link>
-                <Link
                   href="/docs/installation"
                   className="block rounded-lg border p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
                 >
