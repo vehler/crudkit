@@ -25,7 +25,8 @@ import {
 import { Toolbar } from './toolbar'
 import { DefaultField, DefaultFormLayout, DefaultSubmitButton } from './form'
 import { DefaultViewField, DefaultViewLayout } from './view'
-import type { CrudListProps, CrudFormProps as CrudFormPropsType, CrudViewProps } from '../lib/component-types'
+import { DefaultFilter, DefaultFilterInput, DefaultFilterLayout } from './filters'
+import type { CrudListProps, CrudFormProps as CrudFormPropsType, CrudViewProps, CrudFiltersProps } from '../lib/component-types'
 
 // ============================================
 // CONTEXT
@@ -75,12 +76,12 @@ function Crud({ schema, dataProvider, children }: CrudProps) {
 // FILTERS COMPONENT
 // ============================================
 
-interface CrudFiltersProps {
-  filterFields?: Field[]
-}
-
-const CrudFilters = React.memo(({ filterFields }: CrudFiltersProps) => {
+const CrudFilters = React.memo(({ filterFields, className, components = {} }: CrudFiltersProps) => {
   const { schema, state, actions } = useCrudContext()
+
+  // Use custom components or defaults
+  const Filter = components.Filter ?? DefaultFilter
+  const Layout = components.Layout ?? DefaultFilterLayout
 
   const fields = useMemo(
     () => filterFields || schema.fields.filter((f) => f.filterable),
@@ -91,61 +92,41 @@ const CrudFilters = React.memo(({ filterFields }: CrudFiltersProps) => {
     actions.clearFilters()
   }, [actions])
 
+  const hasActiveFilters = useMemo(
+    () => Object.values(state.filters).some((value) => value !== null && value !== ''),
+    [state.filters]
+  )
+
   if (state.mode !== 'list') return null
   if (fields.length === 0) return null
 
   return (
-    <div className={cn('crud-filters', 'mb-4 rounded bg-muted p-4')}>
-      <h3 className={cn('mb-2 font-semibold')}>Filters</h3>
-      <div className={cn('flex flex-wrap gap-4')}>
-        {fields.map((field) => (
-          <div key={field.name} className="space-y-2">
-            <Label htmlFor={`filter-${field.name}`}>
-              {field.label}
-            </Label>
-            {field.type === 'select' ? (
-              <Select
-                value={state.filters[field.name] || '__all__'}
-                onValueChange={(value) =>
-                  actions.setFilter(field.name, value === '__all__' ? null : value)
-                }
-              >
-                <SelectTrigger id={`filter-${field.name}`} className="w-[180px]">
-                  <SelectValue placeholder="All" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__all__">All</SelectItem>
-                  {field.options?.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ) : (
-              <Input
-                id={`filter-${field.name}`}
-                type="text"
-                value={state.filters[field.name] || ''}
-                onChange={(e) =>
-                  actions.setFilter(field.name, e.target.value || null)
-                }
-                className="w-[180px]"
-              />
-            )}
-          </div>
-        ))}
-        <div className={cn('flex items-end')}>
-          <Button
-            onClick={handleClearFilters}
-            variant="outline"
-            size="sm"
-          >
-            Clear Filters
-          </Button>
-        </div>
-      </div>
-    </div>
+    <Layout
+      onClearFilters={handleClearFilters}
+      hasActiveFilters={hasActiveFilters}
+      schema={schema}
+      actions={actions}
+      state={state}
+      className={className}
+    >
+      {fields.map((field) => {
+        // Use field-specific renderer if provided
+        const FilterComponent = components.filters?.[field.name] ?? Filter
+
+        return (
+          <FilterComponent
+            key={field.name}
+            field={field}
+            value={state.filters[field.name] || ''}
+            onChange={(value) => actions.setFilter(field.name, value || null)}
+            onClear={() => actions.setFilter(field.name, null)}
+            schema={schema}
+            actions={actions}
+            state={state}
+          />
+        )
+      })}
+    </Layout>
   )
 })
 CrudFilters.displayName = 'CrudFilters'

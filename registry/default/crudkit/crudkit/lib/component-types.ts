@@ -621,6 +621,37 @@ export interface FilterInputProps extends BaseComponentProps {
   onChange: (value: string) => void
 }
 
+/**
+ * Props for custom FilterLayout component (filters container).
+ *
+ * @example
+ * ```typescript
+ * const CardFilterLayout: React.FC<FilterLayoutProps> = ({ children, onClearFilters, hasActiveFilters }) => (
+ *   <Card className="mb-4">
+ *     <CardHeader>
+ *       <h3>Filter Results</h3>
+ *     </CardHeader>
+ *     <CardContent>
+ *       <div className="grid grid-cols-3 gap-4">{children}</div>
+ *     </CardContent>
+ *     {hasActiveFilters && (
+ *       <CardFooter>
+ *         <Button onClick={onClearFilters}>Reset Filters</Button>
+ *       </CardFooter>
+ *     )}
+ *   </Card>
+ * )
+ * ```
+ */
+export interface FilterLayoutProps extends BaseComponentProps {
+  /** The child filter components */
+  children: React.ReactNode
+  /** Callback to clear all filters */
+  onClearFilters: () => void
+  /** Whether there are any active filters */
+  hasActiveFilters: boolean
+}
+
 // ============================================================================
 // COMPONENT COLLECTIONS (for `components` prop)
 // ============================================================================
@@ -741,6 +772,7 @@ export interface KanbanComponents<T = any> {
  *   components={{
  *     Filter: CustomFilter,
  *     FilterInput: CustomInput,
+ *     Layout: CardFilterLayout,
  *     filters: {
  *       createdAt: DateRangeFilter,
  *       tags: MultiSelectFilter,
@@ -754,6 +786,8 @@ export interface FilterComponents {
   Filter?: React.ComponentType<FilterProps>
   /** Custom filter input component */
   FilterInput?: React.ComponentType<FilterInputProps>
+  /** Custom filter layout component */
+  Layout?: React.ComponentType<FilterLayoutProps>
   /** Filter-specific overrides (by field name) */
   filters?: Record<string, React.ComponentType<FilterProps>>
 }
