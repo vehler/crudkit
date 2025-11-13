@@ -6,6 +6,9 @@ import { Comparison } from '@/components/home/comparison'
 import { SiteLayout } from '@/components/layout/site-layout'
 import Link from 'next/link'
 
+// Force dynamic rendering for the live demo
+export const dynamic = 'force-dynamic'
+
 export default function Home() {
   return (
     <SiteLayout>
