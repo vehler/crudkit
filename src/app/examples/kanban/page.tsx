@@ -197,8 +197,8 @@ export default function KanbanPage() {
               code={`'use client'
 
 import { useState } from 'react'
-import { Crud } from '@/components/crudkit/crud-table'
-import { KanbanBoard } from '@/components/crudkit/kanban-board'
+import { Crud } from '@/components/crudkit'
+import { KanbanBoard } from '@/components/crudkit/kanban'
 import { MockDataProvider } from '@/lib/examples/mock-data-provider'
 import { taskSchema } from '@/lib/examples/task-schema'
 import { mockTasks } from '@/lib/examples/mock-tasks'
@@ -255,7 +255,7 @@ export default function KanbanPage() {
           </p>
           <div className="mt-4">
             <CodeBlock
-              code={`import { KanbanBoard } from '@/components/crudkit/kanban-board'
+              code={`import { KanbanBoard } from '@/components/crudkit/kanban'
 
 // Basic usage - group by status field
 <KanbanBoard groupField="status" />

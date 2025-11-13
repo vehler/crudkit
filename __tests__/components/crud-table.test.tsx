@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Crud } from '@/components/crudkit/crud-table'
+import { Crud } from "@/components/crudkit";
 import { MockDataProvider } from '@/lib/demo/mock-data-provider'
 import type { Schema } from '@/lib/crudkit/data-provider'
 

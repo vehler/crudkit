@@ -1,7 +1,7 @@
 import React from 'react'
 import { Badge } from '@/components/ui/badge'
-import { DefaultCell } from '@/registry/default/crudkit/crudkit/components/table'
-import type { CellProps } from '@/registry/default/crudkit/crudkit/lib/component-types'
+import { Cell } from '@/components/crudkit/table'
+import type { CellProps } from '@/lib/crudkit/types'
 
 interface DemoUser {
   id: string
@@ -43,7 +43,7 @@ export const LiveDemoCell = React.forwardRef<HTMLTableCellElement, CellProps<Dem
     }
 
     // Use default rendering for other fields
-    return <DefaultCell ref={ref} field={field} value={value} row={row} {...props} />
+    return <Cell ref={ref} field={field} value={value} row={row} {...props} />
   }
 )
 

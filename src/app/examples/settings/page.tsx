@@ -187,7 +187,7 @@ export default function SettingsPage() {
             <CodeBlock
               code={`'use client'
 
-import { Crud } from '@/components/crudkit/crud-table'
+import { Crud } from '@/components/crudkit'
 import { MockDataProvider } from '@/lib/examples/mock-data-provider'
 import { settingSchema } from '@/lib/examples/setting-schema'
 import { mockSettings } from '@/lib/examples/mock-settings'

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { DefaultCell } from '@/registry/default/crudkit/crudkit/components/table'
-import type { CellProps } from '@/registry/default/crudkit/crudkit/lib/component-types'
+import { Cell } from '@/components/crudkit/table'
+import type { CellProps } from '@/lib/crudkit/types'
 
 interface User {
   id: string
@@ -124,7 +124,7 @@ export const UserCell = React.forwardRef<HTMLTableCellElement, CellProps<User>>(
     }
 
     // Use default rendering for other fields
-    return <DefaultCell ref={ref} field={field} value={value} row={row} {...props} />
+    return <Cell ref={ref} field={field} value={value} row={row} {...props} />
   }
 )
 

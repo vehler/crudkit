@@ -8,12 +8,12 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { MoreHorizontal, Eye, Pencil, Copy, Trash2 } from 'lucide-react'
-import type { ActionsProps } from '@/registry/default/crudkit/crudkit/lib/component-types'
+import type { ActionsProps } from '@/lib/crudkit/types'
 
 export const ProductActions = React.forwardRef<HTMLTableCellElement, ActionsProps>(
-  ({ row, actions, ...props }, ref) => {
+  ({ row, actions, onView, onEdit, onDelete, schema, state, ...domProps }, ref) => {
     return (
-      <td ref={ref} className="px-4 py-3" {...props}>
+      <td ref={ref} className="px-4 py-3" {...domProps}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
@@ -22,19 +22,18 @@ export const ProductActions = React.forwardRef<HTMLTableCellElement, ActionsProp
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => actions.view(row)}>
+            <DropdownMenuItem onClick={() => onView?.()}>
               <Eye className="mr-2 h-4 w-4" />
               View Details
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => actions.edit(row)}>
+            <DropdownMenuItem onClick={() => onEdit?.()}>
               <Pencil className="mr-2 h-4 w-4" />
               Edit Product
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                // Duplicate product logic
-                const newProduct = { ...row, id: undefined }
-                actions.create(newProduct)
+                // Duplicate product logic would need custom handling
+                console.log('Duplicate:', row)
               }}
             >
               <Copy className="mr-2 h-4 w-4" />
@@ -42,7 +41,7 @@ export const ProductActions = React.forwardRef<HTMLTableCellElement, ActionsProp
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => actions.delete(row)}
+              onClick={() => onDelete?.()}
               className="text-red-600 focus:text-red-600 dark:text-red-400"
             >
               <Trash2 className="mr-2 h-4 w-4" />

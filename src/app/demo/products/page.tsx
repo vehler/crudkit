@@ -1,6 +1,6 @@
 'use client'
 
-import { Crud } from '@/components/crudkit/crud-table'
+import { Crud } from '@/components/crudkit'
 import { MockDataProvider } from '@/lib/examples/mock-data-provider'
 import { productSchema } from '@/lib/examples/product-schema'
 import { mockProducts } from '@/lib/examples/mock-products'

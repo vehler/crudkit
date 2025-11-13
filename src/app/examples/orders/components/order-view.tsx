@@ -2,7 +2,7 @@ import React from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import type { ViewLayoutProps } from '@/registry/default/crudkit/crudkit/lib/component-types'
+import type { ViewLayoutProps } from '@/lib/crudkit/types'
 import { Package, User, Mail, DollarSign, Calendar, ShoppingBag } from 'lucide-react'
 
 interface Order {

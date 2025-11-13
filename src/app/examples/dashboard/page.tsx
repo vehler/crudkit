@@ -196,7 +196,7 @@ export default function DashboardPage() {
             <CodeBlock
               code={`'use client'
 
-import { Crud } from '@/components/crudkit/crud-table'
+import { Crud } from '@/components/crudkit'
 import { MockDataProvider } from '@/lib/examples/mock-data-provider'
 import { analyticsEventSchema } from '@/lib/examples/analytics-event-schema'
 import { mockAnalyticsEvents } from '@/lib/examples/mock-analytics-events'

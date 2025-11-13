@@ -187,7 +187,7 @@ export default function BlogPage() {
             <CodeBlock
               code={`'use client'
 
-import { Crud } from '@/components/crudkit/crud-table'
+import { Crud } from '@/components/crudkit'
 import { MockDataProvider } from '@/lib/examples/mock-data-provider'
 import { blogPostSchema } from '@/lib/examples/blog-post-schema'
 import { mockBlogPosts } from '@/lib/examples/mock-blog-posts'

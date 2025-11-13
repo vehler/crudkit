@@ -8,7 +8,7 @@ import type { DataProvider, GetListParams, Schema } from '@/lib/crudkit/data-pro
 
 type Mode = 'list' | 'create' | 'edit' | 'view'
 
-interface CrudState<T = any> {
+export interface CrudState<T = any> {
   mode: Mode
   selectedId: string | null
   page: number
@@ -25,7 +25,7 @@ interface CrudState<T = any> {
   currentItem: T | null
 }
 
-interface CrudActions {
+export interface CrudActions {
   setMode: (mode: Mode, id?: string | null) => void
   setSort: (field: string) => void
   setPage: (page: number) => void
@@ -254,27 +254,30 @@ export function useCrud<T = any>(
     await fetchList()
   }, [fetchList])
 
-  const save = useCallback(async (formData: Record<string, unknown>) => {
-    setLoading(true)
-    setError(null)
+  const save = useCallback(
+    async (formData: Record<string, unknown>) => {
+      setLoading(true)
+      setError(null)
 
-    try {
-      if (urlState.mode === 'create') {
-        await dataProvider.create(formData)
-      } else if (urlState.mode === 'edit' && urlState.id) {
-        await dataProvider.update(urlState.id, formData)
+      try {
+        if (urlState.mode === 'create') {
+          await dataProvider.create(formData as Partial<T>)
+        } else if (urlState.mode === 'edit' && urlState.id) {
+          await dataProvider.update(urlState.id, formData as Partial<T>)
+        }
+
+        // Return to list and refresh
+        setUrlState({ mode: 'list', id: null })
+        await fetchList()
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to save')
+        throw err // Re-throw to let form handle it
+      } finally {
+        setLoading(false)
       }
-
-      // Return to list and refresh
-      setUrlState({ mode: 'list', id: null })
-      await fetchList()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save')
-      throw err // Re-throw to let form handle it
-    } finally {
-      setLoading(false)
-    }
-  }, [urlState.mode, urlState.id, dataProvider, setUrlState, fetchList])
+    },
+    [urlState.mode, urlState.id, dataProvider, setUrlState, fetchList]
+  )
 
   const deleteAction = useCallback(async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this item?')) {

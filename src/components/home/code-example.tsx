@@ -17,7 +17,7 @@ export function CodeExample() {
     {
       title: 'Basic Usage',
       language: 'tsx',
-      code: `import { Crud } from '@/components/crudkit/crud-table'
+      code: `import { Crud } from '@/components/crudkit'
 import { userSchema } from '@/lib/user-schema'
 import { dataProvider } from '@/lib/data-provider'
 
